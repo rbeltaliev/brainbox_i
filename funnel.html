@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Воронка фонда — brainbox_I</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=Geologica:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #f4f2ee; --white: #ffffff; --text: #12151f; --text-2: #444c5e; --text-3: #8891a6;
+      --accent: #1847e3; --accent-hover: #1238c0; --accent-light: #eef1fd; --accent-muted: #c7d0f9;
+      --border: #e0dcd4; --shadow: 0 1px 3px rgba(18,21,31,.06); --shadow-md: 0 8px 32px rgba(18,21,31,.10);
+      --radius: 10px; --radius-lg: 16px; --radius-pill: 100px;
+    }
+    html { font-size: 16px; }
+    body { font-family: 'Onest', sans-serif; background: var(--bg); color: var(--text); -webkit-font-smoothing: antialiased; display: flex; min-height: 100vh; }
+
+    .sidebar { width: 220px; background: var(--white); border-right: 1px solid var(--border); display: flex; flex-direction: column; position: fixed; top: 0; left: 0; bottom: 0; z-index: 10; }
+    .sidebar-logo { padding: 20px 20px 16px; border-bottom: 1px solid var(--border); }
+    .sidebar-logo a { font-family: 'Geologica', sans-serif; font-size: 15px; font-weight: 700; letter-spacing: -0.04em; color: var(--text); text-decoration: none; }
+    .sidebar-logo .i { color: var(--accent); }
+    .sidebar-role { font-size: 11px; color: var(--text-3); font-weight: 500; margin-top: 2px; }
+    .sidebar-nav { flex: 1; padding: 12px 8px; overflow-y: auto; }
+    .nav-group-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-3); padding: 10px 12px 4px; }
+    .nav-item { display: flex; align-items: center; gap: 9px; padding: 9px 12px; border-radius: var(--radius); font-size: 13px; font-weight: 500; color: var(--text-2); text-decoration: none; margin-bottom: 1px; }
+    .nav-item:hover { background: var(--bg); color: var(--text); }
+    .nav-item.active { background: var(--accent-light); color: var(--accent); font-weight: 600; }
+    .nav-icon { font-size: 15px; flex-shrink: 0; }
+    .nav-badge { margin-left: auto; background: var(--accent); color: var(--white); font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: var(--radius-pill); }
+    .sidebar-user { padding: 16px; border-top: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
+    .user-av { width: 32px; height: 32px; border-radius: 50%; background: var(--accent-light); color: var(--accent); font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .user-name { font-size: 13px; font-weight: 600; }
+    .user-role { font-size: 11px; color: var(--text-3); }
+
+    .main { margin-left: 220px; flex: 1; padding: 32px 36px; overflow-x: auto; }
+    .page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 32px; }
+    .page-title { font-family: 'Geologica', sans-serif; font-size: 24px; font-weight: 800; letter-spacing: -0.03em; }
+    .btn { font-family: 'Onest', sans-serif; font-size: 13px; font-weight: 600; padding: 8px 18px; border-radius: var(--radius-pill); border: none; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: background .15s; }
+    .btn-primary { background: var(--accent); color: var(--white); }
+    .btn-ghost { background: none; color: var(--text-2); border: 1px solid var(--border); }
+    .btn-ghost:hover { background: var(--white); }
+
+    /* KANBAN */
+    .kanban { display: flex; gap: 16px; min-width: max-content; padding-bottom: 16px; }
+    .col { width: 260px; flex-shrink: 0; }
+    .col-header { padding: 10px 14px; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; }
+    .col-title { font-size: 12px; font-weight: 700; letter-spacing: 0.02em; color: var(--text-2); }
+    .col-count { font-size: 11px; font-weight: 700; color: var(--white); background: var(--text-3); padding: 1px 7px; border-radius: var(--radius-pill); }
+    .col-count.blue { background: var(--accent); }
+
+    .kcard { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 14px 16px; margin-bottom: 8px; cursor: pointer; }
+    .kcard:hover { border-color: var(--accent-muted); box-shadow: var(--shadow-md); }
+    .kcard-name { font-size: 14px; font-weight: 700; margin-bottom: 3px; }
+    .kcard-desc { font-size: 12px; color: var(--text-2); margin-bottom: 10px; line-height: 1.4; }
+    .kcard-hypo { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; font-size: 11px; color: var(--text-2); line-height: 1.45; margin-bottom: 10px; font-style: italic; }
+    .kcard-footer { display: flex; align-items: center; justify-content: space-between; }
+    .kcard-mm { font-size: 11px; color: var(--text-3); }
+    .tag { font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: var(--radius-pill); display: inline-block; }
+    .tag-orange { background: #fff7ed; color: #c2410c; border: 1px solid #fed7aa; }
+    .tag-blue { background: var(--accent-light); color: var(--accent); }
+    .tag-green { background: #dcfce7; color: #16a34a; }
+    .tag-red { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
+    .tag-grey { background: var(--bg); color: var(--text-2); border: 1px solid var(--border); }
+
+    .col-empty { border: 1px dashed var(--border); border-radius: var(--radius-lg); padding: 20px; text-align: center; font-size: 12px; color: var(--text-3); }
+  </style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <a href="index.html">brainbox<span class="i">_I</span></a>
+    <div class="sidebar-role">Администрация фонда</div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-group-label">Фонд</div>
+    <a href="funnel.html" class="nav-item active"><span class="nav-icon">🔄</span> Воронка</a>
+    <a href="portfolio.html" class="nav-item"><span class="nav-icon">💼</span> Портфель</a>
+    <a href="matchmaker.html" class="nav-item"><span class="nav-icon">🎯</span> Матч-мейкеры</a>
+    <div class="nav-group-label">Стартапы</div>
+    <a href="startup-card.html" class="nav-item"><span class="nav-icon">📋</span> Карточки</a>
+    <a href="ai-match.html" class="nav-item"><span class="nav-icon">🤖</span> AI-подбор</a>
+    <div class="nav-group-label">Менторы</div>
+    <a href="mentors.html" class="nav-item"><span class="nav-icon">👥</span> Менторы</a>
+    <a href="mentor-profile.html" class="nav-item"><span class="nav-icon">👤</span> Профили</a>
+  </nav>
+  <div class="sidebar-user">
+    <div class="user-av">АД</div>
+    <div>
+      <div class="user-name">Алина Дмитриева</div>
+      <div class="user-role">Администратор фонда</div>
+    </div>
+  </div>
+</aside>
+
+<main class="main">
+  <div class="page-header">
+    <div class="page-title">Воронка фонда</div>
+    <div style="display:flex;gap:8px;">
+      <a href="#" class="btn btn-ghost">Фильтр</a>
+      <a href="apply.html" class="btn btn-primary">+ Новая заявка</a>
+    </div>
+  </div>
+
+  <div class="kanban">
+
+    <!-- 1 -->
+    <div class="col">
+      <div class="col-header">
+        <span class="col-title">НОВЫЕ ЗАЯВКИ</span>
+        <span class="col-count">3</span>
+      </div>
+      <div class="kcard">
+        <div class="kcard-name">NeuroDoc</div>
+        <div class="kcard-desc">AI-ассистент для врачей · Pre-seed · запрос 15 млн ₽</div>
+        <div class="kcard-footer"><span class="kcard-mm">Без матч-мейкера</span><span class="tag tag-grey">Новая</span></div>
+      </div>
+      <div class="kcard">
+        <div class="kcard-name">Флоу</div>
+        <div class="kcard-desc">B2B SaaS для управления проектами · Seed · запрос 20 млн ₽</div>
+        <div class="kcard-footer"><span class="kcard-mm">Без матч-мейкера</span><span class="tag tag-grey">Новая</span></div>
+      </div>
+      <div class="kcard">
+        <div class="kcard-name">EduPath</div>
+        <div class="kcard-desc">EdTech платформа адаптивного обучения · Pre-seed · запрос 10 млн ₽</div>
+        <div class="kcard-footer"><span class="kcard-mm">Без матч-мейкера</span><span class="tag tag-grey">Новая</span></div>
+      </div>
+    </div>
+
+    <!-- 2 -->
+    <div class="col">
+      <div class="col-header">
+        <span class="col-title">WELCOME-CALL</span>
+        <span class="col-count">2</span>
+      </div>
+      <div class="kcard">
+        <div class="kcard-name">ClickMetrics</div>
+        <div class="kcard-desc">Аналитика для e-commerce · Seed · запрос 25 млн ₽</div>
+        <div class="kcard-footer"><span class="kcard-mm">Сергей Мазур</span><span class="tag tag-orange">5 июня 14:00</span></div>
+      </div>
+      <div class="kcard">
+        <div class="kcard-name">SafePay</div>
+        <div class="kcard-desc">FinTech · Платёжная инфраструктура для SMB · запрос 40 млн ₽</div>
+        <div class="kcard-footer"><span class="kcard-mm">Даурен Токтамысов</span><span class="tag tag-orange">7 июня 11:00</span></div>
+      </div>
+    </div>
+
+    <!-- 3 -->
+    <div class="col">
+      <div class="col-header">
+        <span class="col-title">ТАРГЕТЫ</span>
+        <span class="col-count blue">4</span>
+      </div>
+      <div class="kcard">
+        <div class="kcard-name">VOX</div>
+        <div class="kcard-desc">Голосовой AI-ассистент · Seed · MRR 420K ₽</div>
+        <div class="kcard-hypo">"Нужен эксперт по Enterprise Sales для перехода B2C → B2B"</div>
+        <div class="kcard-footer"><span class="kcard-mm">Сергей Мазур</span><span class="tag tag-orange">Поиск ментора</span></div>
+      </div>
+      <div class="kcard">
+        <div class="kcard-name">Hiremate</div>
+        <div class="kcard-desc">AI-рекрутинг · Pre-seed · 5 клиентов</div>
+        <div class="kcard-hypo">"Нужен Product Marketing с опытом в HR B2B"</div>
+        <div class="kcard-footer"><span class="kcard-mm">Родион Брехач</span><span class="tag tag-orange">Поиск ментора</span></div>
+      </div>
+      <div class="kcard">
+        <div class="kcard-name">Indee</div>
+        <div class="kcard-desc">Платформа авторского кино · Pre-seed</div>
+        <div class="kcard-hypo">"Нужен эксперт по медийному продвижению и community"</div>
+        <div class="kcard-footer"><span class="kcard-mm">Родион Брехач</span><span class="tag tag-orange">Поиск ментора</span></div>
+      </div>
+      <div class="kcard">
+        <div class="kcard-name">Бит за Бид</div>
+        <div class="kcard-desc">Музыкальная платформа · Pre-seed</div>
+        <div class="kcard-hypo">"Нужен эксперт по монетизации digital-контента и маркетплейсам"</div>
+        <div class="kcard-footer"><span class="kcard-mm">Никита Толстов</span><span class="tag tag-blue">Ментор найден</span></div>
+      </div>
+    </div>
+
+    <!-- 4 -->
+    <div class="col">
+      <div class="col-header">
+        <span class="col-title">ИНВЕСТКОМ</span>
+        <span class="col-count">1</span>
+      </div>
+      <div class="kcard">
+        <div class="kcard-name">Долгожитель</div>
+        <div class="kcard-desc">HealthTech · Seed · MRR 280K ₽</div>
+        <div class="kcard-hypo">"Нужен эксперт по B2G в здравоохранении"</div>
+        <div class="kcard-footer"><span class="kcard-mm">Даурен Токтамысов</span><span class="tag tag-blue">На рассмотрении</span></div>
+      </div>
+    </div>
+
+    <!-- 5 -->
+    <div class="col">
+      <div class="col-header">
+        <span class="col-title">ПОРТФЕЛЬ</span>
+        <span class="col-count blue">5</span>
+      </div>
+      <div class="kcard">
+        <div class="kcard-name">VOX</div>
+        <div class="kcard-desc">Голосовой AI · Seed</div>
+        <div class="kcard-footer"><span class="kcard-mm">Ментор: Ринат Шамсиев</span><span class="tag tag-green">Активный</span></div>
+      </div>
+      <div class="kcard">
+        <div class="kcard-name">Hiremate</div>
+        <div class="kcard-desc">AI-рекрутинг · Pre-seed</div>
+        <div class="kcard-footer"><span class="kcard-mm">Ментор: Людмила Булавкина</span><span class="tag tag-green">Активный</span></div>
+      </div>
+      <div class="kcard">
+        <div class="kcard-name">Indee</div>
+        <div class="kcard-desc">Авторское кино · Pre-seed</div>
+        <div class="kcard-footer"><span class="kcard-mm">Ментор: Никита Комаров</span><span class="tag tag-green">Активный</span></div>
+      </div>
+      <div class="kcard">
+        <div class="kcard-name">Долгожитель</div>
+        <div class="kcard-desc">HealthTech · Seed</div>
+        <div class="kcard-footer"><span class="kcard-mm">Ментор: Павел Прасс</span><span class="tag tag-green">Активный</span></div>
+      </div>
+      <div class="kcard">
+        <div class="kcard-name">Бит за Бид</div>
+        <div class="kcard-desc">Музыкальная платформа</div>
+        <div class="kcard-footer"><span class="kcard-mm">Ментор: Никита Толстов</span><span class="tag tag-green">Активный</span></div>
+      </div>
+    </div>
+
+    <!-- 6 -->
+    <div class="col">
+      <div class="col-header">
+        <span class="col-title">ОТКАЗЫ</span>
+        <span class="col-count">2</span>
+      </div>
+      <div class="kcard">
+        <div class="kcard-name">QuickLoan</div>
+        <div class="kcard-desc">Микрофинансирование · не соответствует фокусу фонда</div>
+        <div class="kcard-footer"><span class="kcard-mm">—</span><span class="tag tag-red">Отказ</span></div>
+      </div>
+      <div class="kcard">
+        <div class="kcard-name">GameStream</div>
+        <div class="kcard-desc">Игровой стриминг · не нашли ментора</div>
+        <div class="kcard-footer"><span class="kcard-mm">—</span><span class="tag tag-red">Отказ</span></div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+</body>
+</html>

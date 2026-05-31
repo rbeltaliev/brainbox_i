@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>brainbox_I — Умный венчурный фонд</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=Geologica:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #f4f2ee;
+      --white: #ffffff;
+      --dark: #12151f;
+      --text: #12151f;
+      --text-2: #444c5e;
+      --text-3: #8891a6;
+      --accent: #1847e3;
+      --accent-hover: #1238c0;
+      --accent-light: #eef1fd;
+      --accent-muted: #c7d0f9;
+      --border: #e0dcd4;
+      --border-light: #ebebee;
+      --shadow: 0 1px 3px rgba(18,21,31,.06);
+      --shadow-md: 0 8px 32px rgba(18,21,31,.10);
+      --shadow-lg: 0 24px 64px rgba(18,21,31,.14);
+      --radius: 10px;
+      --radius-lg: 16px;
+      --radius-pill: 100px;
+    }
+    html { font-size: 16px; scroll-behavior: smooth; }
+    body { font-family: 'Onest', sans-serif; background: var(--bg); color: var(--text); -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+
+    /* ── NAV ── */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      height: 60px;
+      background: rgba(244,242,238,.88);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center;
+      padding: 0 32px; gap: 8px;
+    }
+    .nav-logo {
+      font-family: 'Geologica', sans-serif; font-size: 15px; font-weight: 700;
+      letter-spacing: -0.04em; color: var(--text); text-decoration: none; flex-shrink: 0;
+    }
+    .nav-logo .i { color: var(--accent); }
+    .nav-sep { width: 1px; height: 20px; background: var(--border); margin: 0 8px; }
+    .nav-eco { font-size: 12px; color: var(--text-3); font-weight: 500; }
+    .nav-spacer { flex: 1; }
+    .nav-links { display: flex; align-items: center; gap: 2px; }
+    .nav-link { font-size: 14px; font-weight: 500; color: var(--text-2); text-decoration: none; padding: 6px 14px; border-radius: var(--radius-pill); transition: background .15s, color .15s; }
+    .nav-link:hover { background: var(--accent-light); color: var(--accent); }
+    .btn { font-family: 'Onest', sans-serif; font-size: 14px; font-weight: 600; padding: 9px 20px; border-radius: var(--radius-pill); border: none; cursor: pointer; transition: background .15s, color .15s, border-color .15s; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+    .btn-primary { background: var(--accent); color: var(--white); }
+    .btn-primary:hover { background: var(--accent-hover); }
+    .btn-ghost { background: none; color: var(--text-2); border: 1px solid var(--border); }
+    .btn-ghost:hover { background: var(--white); color: var(--text); }
+    .btn-lg { padding: 14px 28px; font-size: 15px; }
+    .btn-white { background: var(--white); color: var(--text); }
+    .btn-white:hover { background: var(--bg); }
+
+    /* ── HERO ── */
+    .hero {
+      padding: 108px 32px 72px;
+      max-width: 1100px; margin: 0 auto;
+      text-align: center;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--white); border: 1px solid var(--border);
+      border-radius: var(--radius-pill); padding: 5px 14px 5px 10px;
+      font-size: 12px; font-weight: 500; color: var(--text-2); margin-bottom: 36px;
+    }
+    .hero-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+    h1 {
+      font-family: 'Geologica', sans-serif;
+      font-size: clamp(40px, 6.5vw, 76px);
+      font-weight: 900; letter-spacing: -0.04em; line-height: 1.05;
+      color: var(--text); margin-bottom: 24px;
+    }
+    h1 .blue { color: var(--accent); }
+    .hero-sub { font-size: clamp(16px, 1.8vw, 19px); color: var(--text-2); line-height: 1.65; max-width: 600px; margin: 0 auto 40px; }
+    .hero-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 72px; }
+
+    /* ── MATCH VISUAL ── */
+    .match-visual { display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; }
+    .match-card {
+      background: var(--white); border: 1px solid var(--border);
+      border-radius: var(--radius-lg); padding: 22px 24px;
+      text-align: left; width: 272px; box-shadow: var(--shadow-md);
+    }
+    .match-card-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-3); margin-bottom: 10px; }
+    .match-card-label.blue { color: var(--accent); }
+    .match-card-name { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+    .match-card-sub { font-size: 12px; color: var(--text-2); margin-bottom: 12px; line-height: 1.4; }
+    .match-card-hypo {
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 10px 12px;
+      font-size: 13px; color: var(--text); line-height: 1.5; margin-bottom: 12px;
+    }
+    .tags { display: flex; flex-wrap: wrap; gap: 5px; }
+    .tag { font-size: 11px; font-weight: 500; padding: 3px 9px; border-radius: var(--radius-pill); }
+    .tag-blue { background: var(--accent-light); color: var(--accent); }
+    .tag-grey { background: var(--bg); color: var(--text-2); border: 1px solid var(--border); }
+    .tag-green { background: #dcfce7; color: #16a34a; }
+    .match-connector { display: flex; flex-direction: column; align-items: center; gap: 0; }
+    .match-line { width: 1px; height: 28px; background: var(--border); }
+    .match-pct-wrap { display: flex; flex-direction: column; align-items: center; padding: 10px 0; gap: 3px; }
+    .match-pct { width: 52px; height: 52px; border-radius: 50%; background: var(--accent); color: var(--white); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; letter-spacing: -0.02em; }
+    .match-pct-label { font-size: 10px; color: var(--text-3); font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; }
+    .match-reasons { display: flex; flex-direction: column; gap: 6px; }
+    .match-reason { display: flex; align-items: flex-start; gap: 6px; font-size: 12px; color: var(--text-2); line-height: 1.4; }
+    .match-reason::before { content: '✓'; color: #16a34a; font-weight: 700; flex-shrink: 0; font-size: 11px; margin-top: 1px; }
+
+    /* ── STATS ── */
+    .stats { background: var(--white); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 48px 32px; }
+    .stats-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 32px; }
+    .stat { text-align: center; }
+    .stat-num { font-family: 'Geologica', sans-serif; font-size: 52px; font-weight: 900; letter-spacing: -0.04em; color: var(--text); line-height: 1; }
+    .stat-num em { color: var(--accent); font-style: normal; font-size: 36px; }
+    .stat-label { font-size: 13px; color: var(--text-2); margin-top: 8px; line-height: 1.4; }
+
+    /* ── SECTIONS ── */
+    .section { padding: 88px 32px; }
+    .section-inner { max-width: 1100px; margin: 0 auto; }
+    .section-header { margin-bottom: 48px; }
+    .eyebrow { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--accent); margin-bottom: 12px; }
+    h2 { font-family: 'Geologica', sans-serif; font-size: clamp(28px, 4vw, 44px); font-weight: 800; letter-spacing: -0.03em; line-height: 1.12; color: var(--text); }
+    .section-desc { font-size: 16px; color: var(--text-2); line-height: 1.65; margin-top: 12px; max-width: 560px; }
+
+    /* ── STEPS ── */
+    .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
+    .step { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 28px 24px; }
+    .step-num { width: 34px; height: 34px; border-radius: 50%; background: var(--accent-light); color: var(--accent); font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; }
+    .step-title { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+    .step-desc { font-size: 13px; color: var(--text-2); line-height: 1.55; }
+
+    /* ── MENTORS ── */
+    .mentors-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 14px; }
+    .mentor-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 18px 20px; display: flex; gap: 14px; align-items: flex-start; }
+    .mentor-card:hover { border-color: var(--accent-muted); box-shadow: var(--shadow-md); transition: border-color .2s, box-shadow .2s; }
+    .mentor-av { width: 44px; height: 44px; border-radius: 50%; background: var(--accent-light); border: 2px solid var(--accent-muted); flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; color: var(--accent); font-family: 'Geologica', sans-serif; letter-spacing: -0.02em; }
+    .mentor-name { font-size: 14px; font-weight: 700; margin-bottom: 3px; }
+    .mentor-role { font-size: 12px; color: var(--text-2); line-height: 1.45; margin-bottom: 10px; }
+    .mentor-model { font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: var(--radius-pill); background: var(--bg); color: var(--text-2); border: 1px solid var(--border); display: inline-block; }
+
+    /* ── PORTFOLIO ── */
+    .portfolio-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 16px; }
+    .portfolio-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 28px 20px; text-align: center; text-decoration: none; color: inherit; display: block; }
+    .portfolio-card:hover { border-color: var(--accent-muted); box-shadow: var(--shadow-md); transition: all .2s; }
+    .portfolio-logo { width: 56px; height: 56px; border-radius: 12px; background: var(--bg); border: 1px solid var(--border); margin: 0 auto 16px; display: flex; align-items: center; justify-content: center; font-family: 'Geologica', sans-serif; font-size: 11px; font-weight: 800; color: var(--text-3); letter-spacing: -0.01em; }
+    .portfolio-name { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+    .portfolio-desc { font-size: 12px; color: var(--text-2); line-height: 1.4; margin-bottom: 14px; }
+
+    /* ── DARK BLOCK ── */
+    .dark-block { background: var(--dark); border-radius: 20px; padding: 72px 56px; display: flex; justify-content: space-between; align-items: center; gap: 40px; flex-wrap: wrap; }
+    .dark-block h2 { color: var(--white); }
+    .dark-block .section-desc { color: rgba(255,255,255,.55); max-width: 480px; }
+    .dark-block-actions { display: flex; flex-direction: column; gap: 12px; align-items: flex-end; }
+
+    /* ── ECOSYSTEM ── */
+    .eco-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+    .eco-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 24px; text-decoration: none; color: inherit; display: block; }
+    .eco-card:hover { border-color: var(--accent-muted); transition: border-color .2s; }
+    .eco-num { font-family: 'Geologica', sans-serif; font-size: 22px; font-weight: 900; color: var(--accent); letter-spacing: -0.04em; margin-bottom: 8px; }
+    .eco-title { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+    .eco-desc { font-size: 13px; color: var(--text-2); line-height: 1.45; }
+
+    /* ── FOOTER ── */
+    footer { border-top: 1px solid var(--border); padding: 48px 32px; }
+    .footer-inner { max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 32px; }
+    .footer-brand {}
+    .footer-logo { font-family: 'Geologica', sans-serif; font-size: 18px; font-weight: 700; letter-spacing: -0.04em; color: var(--text); margin-bottom: 6px; }
+    .footer-logo span { color: var(--accent); }
+    .footer-sub { font-size: 12px; color: var(--text-3); line-height: 1.5; }
+    .footer-links-group { display: flex; flex-direction: column; gap: 10px; }
+    .footer-links-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-3); margin-bottom: 2px; }
+    .footer-link { font-size: 13px; color: var(--text-2); text-decoration: none; }
+    .footer-link:hover { color: var(--accent); }
+    .footer-bottom { border-top: 1px solid var(--border); margin-top: 40px; padding-top: 24px; text-align: center; font-size: 12px; color: var(--text-3); }
+
+    /* ── SCREENS ── */
+    .screens-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    @media (min-width: 768px) { .screens-grid { grid-template-columns: repeat(4, 1fr); } }
+    .screen-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; transition: box-shadow .2s, transform .2s; text-decoration: none; color: inherit; display: block; }
+    .screen-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+    .screen-preview { height: 100px; display: flex; align-items: center; justify-content: center; font-size: 32px; border-bottom: 1px solid var(--border-light); }
+    .screen-info { padding: 12px 14px; }
+    .screen-name { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+    .screen-desc { font-size: 12px; color: var(--text-3); }
+
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .match-visual { flex-direction: column; align-items: center; }
+      .match-connector { flex-direction: row; }
+      .match-line { width: 28px; height: 1px; }
+      .dark-block { padding: 40px 28px; }
+      .dark-block-actions { align-items: flex-start; }
+      .footer-inner { flex-direction: column; }
+    }
+    @media (min-width: 768px) { .nav-links { display: flex; } }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <a href="index.html" class="nav-logo">brainbox<span class="i">_I</span></a>
+  <div class="nav-sep"></div>
+  <span class="nav-eco">1.brainbox.vc</span>
+  <div class="nav-spacer"></div>
+  <div class="nav-links">
+    <a href="#about" class="nav-link">О фонде</a>
+    <a href="#how" class="nav-link">Как это работает</a>
+    <a href="#mentors" class="nav-link">Менторы</a>
+    <a href="#portfolio" class="nav-link">Портфель</a>
+  </div>
+  <a href="mentor-join.html" class="btn btn-ghost" style="margin-left:8px;font-size:13px;padding:7px 16px;">Стать ментором</a>
+  <a href="apply.html" class="btn btn-primary" style="font-size:13px;padding:7px 16px;">Подать заявку →</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">
+    <span class="dot"></span>
+    Умный венчурный фонд нового поколения
+  </div>
+
+  <h1>Мы ищем не&nbsp;стартапы.<br>Мы ищем <span class="blue">пары.</span></h1>
+
+  <p class="hero-sub">
+    Каждый стартап в portфеле brainbox_I получает профильного эксперта,
+    который решил именно его проблему роста. Фонд инвестирует только
+    если ментор готов войти в проект.
+  </p>
+
+  <div class="hero-actions">
+    <a href="apply.html" class="btn btn-primary btn-lg">Подать заявку</a>
+    <a href="mentor-join.html" class="btn btn-ghost btn-lg">Стать ментором фонда</a>
+  </div>
+
+  <!-- MATCH VISUAL — центральная идея -->
+  <div class="match-visual">
+    <div class="match-card">
+      <div class="match-card-label blue">Гипотеза роста · VOX</div>
+      <div class="match-card-name">Стартап нуждается в</div>
+      <div class="match-card-hypo">
+        "Для масштабирования нужен эксперт по Enterprise Sales — выход из B2C в корпоративный сегмент"
+      </div>
+      <div class="tags">
+        <span class="tag tag-blue">Enterprise Sales</span>
+        <span class="tag tag-blue">B2B SaaS</span>
+      </div>
+    </div>
+
+    <div class="match-connector">
+      <div class="match-line"></div>
+      <div class="match-pct-wrap">
+        <div class="match-pct">92%</div>
+        <div class="match-pct-label">AI-матч</div>
+      </div>
+      <div class="match-line"></div>
+    </div>
+
+    <div class="match-card">
+      <div class="match-card-label">Ментор фонда</div>
+      <div class="match-card-name">Ринат Шамсиев</div>
+      <div class="match-card-sub">Ведущий трекер ФРИИ · CEO Zvonobot</div>
+      <div class="match-reasons">
+        <div class="match-reason">Опыт масштабирования B2B SaaS 500+ компаний</div>
+        <div class="match-reason">Специализация — переход в корпоративный сегмент</div>
+        <div class="match-reason">Трекер ФРИИ с фокусом на Enterprise</div>
+      </div>
+      <div class="tags" style="margin-top:12px;">
+        <span class="tag tag-grey">ФРИИ</span>
+        <span class="tag tag-grey">500+ компаний</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="stats">
+  <div class="stats-inner">
+    <div class="stat">
+      <div class="stat-num">100<em>+</em></div>
+      <div class="stat-label">Менторов и инвесторов<br>в сообществе фонда</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">500<em>М</em></div>
+      <div class="stat-label">Рублей<br>под управлением</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">5</div>
+      <div class="stat-label">Портфельных<br>компаний</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">1<em>:1</em></div>
+      <div class="stat-label">Ментор на каждый<br>портфельный проект</div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="section" id="how">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="eyebrow">Процесс</div>
+      <h2>От заявки до роста —<br>управляемый процесс</h2>
+      <p class="section-desc">Мы не рассматриваем питч-деки в очереди. Каждый стартап проходит структурированный путь, в центре которого — формирование гипотезы роста и точный подбор ментора.</p>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-title">Заявка и welcome-call</div>
+        <div class="step-desc">Стартап подаёт карточку. Матч-мейкер из числа менторов проводит первый звонок и изучает бизнес.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-title">Гипотеза роста</div>
+        <div class="step-desc">Матч-мейкер формулирует главный барьер роста: что именно мешает стартапу масштабироваться прямо сейчас.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-title">AI-подбор ментора</div>
+        <div class="step-desc">Система анализирует гипотезу и находит профильного эксперта из сообщества — с объяснением совпадения.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-title">Сделка и сопровождение</div>
+        <div class="step-desc">Фонд входит в капитал. Ментор получает долю. Ежемесячный ритм: звонок → транскрипт → AI-анализ → задачи.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MENTORS -->
+<section class="section" id="mentors" style="background: var(--white); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="eyebrow">Сообщество</div>
+      <h2>Менторы фонда</h2>
+      <p class="section-desc">Инвесторы, которые вкладывают не только деньги — они защищают капитал своей экспертизой и временем.</p>
+    </div>
+    <div class="mentors-grid">
+
+      <div class="mentor-card">
+        <div class="mentor-av">ОЛ</div>
+        <div>
+          <div class="mentor-name">Олег Любимов</div>
+          <div class="mentor-role">CEO Selectel — лидер рынка облачных серверов для бизнеса</div>
+          <span class="mentor-model">Серверы в обмен на долю</span>
+        </div>
+      </div>
+
+      <div class="mentor-card">
+        <div class="mentor-av">НК</div>
+        <div>
+          <div class="mentor-name">Никита Комаров</div>
+          <div class="mentor-role">Замглавного редактора медиахолдинга ТОП-5 в России по охвату</div>
+          <span class="mentor-model">Медиа в обмен на долю</span>
+        </div>
+      </div>
+
+      <div class="mentor-card">
+        <div class="mentor-av">ПП</div>
+        <div>
+          <div class="mentor-name">Павел Прасс</div>
+          <div class="mentor-role">CEO и основатель Инфинитум — крупнейший специализированный депозитарий России</div>
+          <span class="mentor-model">Развитие B2B/B2G за долю</span>
+        </div>
+      </div>
+
+      <div class="mentor-card">
+        <div class="mentor-av">МВ</div>
+        <div>
+          <div class="mentor-name">Михаил Волков</div>
+          <div class="mentor-role">Экс-CEO Сбербанк Страхование и ряда ведущих страховых компаний России</div>
+          <span class="mentor-model">Время в обмен на долю</span>
+        </div>
+      </div>
+
+      <div class="mentor-card">
+        <div class="mentor-av">НТ</div>
+        <div>
+          <div class="mentor-name">Никита Толстов</div>
+          <div class="mentor-role">CEO и основатель Толстов Груп — один из ведущих digital-агентств России</div>
+          <span class="mentor-model">Время в обмен на долю</span>
+        </div>
+      </div>
+
+      <div class="mentor-card">
+        <div class="mentor-av">ЛБ</div>
+        <div>
+          <div class="mentor-name">Людмила Булавкина</div>
+          <div class="mentor-role">Экс-CMO Одноклассники, YouDo · Ведущий бизнес-ангел России</div>
+          <span class="mentor-model">Время в обмен на долю</span>
+        </div>
+      </div>
+
+      <div class="mentor-card">
+        <div class="mentor-av">РШ</div>
+        <div>
+          <div class="mentor-name">Ринат Шамсиев</div>
+          <div class="mentor-role">Ведущий трекер ФРИИ · CEO Zvonobot (капитализация 500+ млн ₽)</div>
+          <span class="mentor-model">Время в обмен на долю</span>
+        </div>
+      </div>
+
+      <div class="mentor-card">
+        <div class="mentor-av">ДТ</div>
+        <div>
+          <div class="mentor-name">Даурен Токтамысов</div>
+          <div class="mentor-role">Инвестор с 20-летним опытом · CFO VEB Engineering (VEB.RF group)</div>
+          <span class="mentor-model">Время в обмен на долю</span>
+        </div>
+      </div>
+
+      <div class="mentor-card">
+        <div class="mentor-av">СМ</div>
+        <div>
+          <div class="mentor-name">Сергей Мазур</div>
+          <div class="mentor-role">Профессиональный трекер и ментор Сколково · 15 лет опыта · 500+ компаний</div>
+          <span class="mentor-model">Время в обмен на долю</span>
+        </div>
+      </div>
+
+      <div class="mentor-card">
+        <div class="mentor-av">РБ</div>
+        <div>
+          <div class="mentor-name">Родион Брехач</div>
+          <div class="mentor-role">Ментор, трекер, инвестор · CEO edtech-группы «Каменный город»</div>
+          <span class="mentor-model">Время в обмен на долю</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- PORTFOLIO -->
+<section class="section" id="portfolio">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="eyebrow">Портфель</div>
+      <h2>Компании фонда</h2>
+      <p class="section-desc">Каждый портфельный стартап работает с профильным ментором и отчитывается ежемесячно.</p>
+    </div>
+    <div class="portfolio-grid">
+      <a href="portfolio.html" class="portfolio-card">
+        <div class="portfolio-logo">HM</div>
+        <div class="portfolio-name">Hiremate</div>
+        <div class="portfolio-desc">AI-рекрутинговая платформа нового поколения</div>
+        <div class="tags" style="justify-content:center;margin-top:12px;"><span class="tag tag-green">Портфель</span></div>
+      </a>
+      <a href="portfolio.html" class="portfolio-card">
+        <div class="portfolio-logo">VOX</div>
+        <div class="portfolio-name">VOX</div>
+        <div class="portfolio-desc">Голосовой AI-ассистент для бизнеса</div>
+        <div class="tags" style="justify-content:center;margin-top:12px;"><span class="tag tag-green">Портфель</span></div>
+      </a>
+      <a href="portfolio.html" class="portfolio-card">
+        <div class="portfolio-logo">IN</div>
+        <div class="portfolio-name">Indee</div>
+        <div class="portfolio-desc">Платформа независимого кино и авторского контента</div>
+        <div class="tags" style="justify-content:center;margin-top:12px;"><span class="tag tag-green">Портфель</span></div>
+      </a>
+      <a href="portfolio.html" class="portfolio-card">
+        <div class="portfolio-logo">ДЖ</div>
+        <div class="portfolio-name">Долгожитель</div>
+        <div class="portfolio-desc">Персонализированные решения для здоровья и долголетия</div>
+        <div class="tags" style="justify-content:center;margin-top:12px;"><span class="tag tag-green">Портфель</span></div>
+      </a>
+      <a href="portfolio.html" class="portfolio-card">
+        <div class="portfolio-logo">БзБ</div>
+        <div class="portfolio-name">Бит за Бид</div>
+        <div class="portfolio-desc">Платформа для независимых музыкантов и продюсеров</div>
+        <div class="tags" style="justify-content:center;margin-top:12px;"><span class="tag tag-green">Портфель</span></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- BECOME MENTOR -->
+<section class="section" id="become-mentor">
+  <div class="section-inner">
+    <div class="dark-block">
+      <div>
+        <div class="eyebrow" style="color:rgba(255,255,255,.4);">Для инвесторов</div>
+        <h2>Стать ментором фонда</h2>
+        <p class="section-desc">
+          Вы становитесь LP фонда и получаете долю в стартапе, которому помогаете.
+          Модели участия: время, ресурсы или деньги в обмен на долю.
+          Принцип «Skin in the game» — каждый инвестор защищает капитал своей экспертизой.
+        </p>
+      </div>
+      <div class="dark-block-actions">
+        <a href="mentor-join.html" class="btn btn-white btn-lg">Узнать подробнее →</a>
+        <div style="font-size:12px;color:rgba(255,255,255,.35);text-align:right;">Рассматриваем по приглашению<br>или по рекомендации</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ECOSYSTEM -->
+<section class="section" style="padding-top:0;">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="eyebrow">Экосистема Brainbox</div>
+      <h2>Три платформы — один путь</h2>
+    </div>
+    <div class="eco-grid">
+      <a href="https://0.brainbox.vc" class="eco-card">
+        <div class="eco-num">0</div>
+        <div class="eco-title">0.brainbox.vc — Песочница</div>
+        <div class="eco-desc">Путь от идеи до создания стартапа. Команда, прототип, акселератор.</div>
+      </a>
+      <a href="https://brainbox.vc" class="eco-card">
+        <div class="eco-num">∞</div>
+        <div class="eco-title">brainbox.vc — Платформа</div>
+        <div class="eco-desc">Путь от стартапа до первых бизнес-ангелов. Синдикаты и краудинвестинг.</div>
+      </a>
+      <a href="index.html" class="eco-card" style="border-color:var(--accent-muted);">
+        <div class="eco-num" style="color:var(--text);">I</div>
+        <div class="eco-title">1.brainbox.vc — Smart-фонд</div>
+        <div class="eco-desc">Путь от первых инвестиций до масштабирования с профильным ментором.</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- SCREENS / DESIGN MVP -->
+<section class="section" id="screens" style="background: var(--white); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+  <div class="section-inner">
+    <div class="eyebrow">Дизайн MVP</div>
+    <h2 style="margin-bottom:8px;">11 готовых экранов</h2>
+    <p class="section-desc" style="margin-bottom:40px;">Полный набор интерфейсов — от подачи заявки до ежемесячного AI-отчёта</p>
+
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-3);margin-bottom:12px;">Стартапам</div>
+    <div class="screens-grid" style="margin-bottom:28px;">
+      <a href="apply.html" class="screen-card">
+        <div class="screen-preview" style="background:#eef1fd;">📝</div>
+        <div class="screen-info"><div class="screen-name">Подача заявки</div><div class="screen-desc">Split-форма с воронкой</div></div>
+      </a>
+      <a href="founders.html" class="screen-card">
+        <div class="screen-preview" style="background:#f0fdf4;">⚡</div>
+        <div class="screen-info"><div class="screen-name">Кабинет фаундера</div><div class="screen-desc">Воронка, метрики, задачи</div></div>
+      </a>
+      <a href="startup-card.html" class="screen-card">
+        <div class="screen-preview" style="background:#eef1fd;">📋</div>
+        <div class="screen-info"><div class="screen-name">Карточка стартапа</div><div class="screen-desc">Команда, запрос, гипотеза</div></div>
+      </a>
+    </div>
+
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-3);margin-bottom:12px;">Менторам и матч-мейкерам</div>
+    <div class="screens-grid" style="margin-bottom:28px;">
+      <a href="mentors.html" class="screen-card">
+        <div class="screen-preview" style="background:#fff7ed;">👥</div>
+        <div class="screen-info"><div class="screen-name">Кабинет ментора</div><div class="screen-desc">Таргеты, запросы, портфель</div></div>
+      </a>
+      <a href="matchmaker.html" class="screen-card">
+        <div class="screen-preview" style="background:#faf5ff;">🎯</div>
+        <div class="screen-info"><div class="screen-name">Кабинет матч-мейкера</div><div class="screen-desc">Очередь + форма гипотезы</div></div>
+      </a>
+      <a href="mentor-profile.html" class="screen-card">
+        <div class="screen-preview" style="background:#f4f2ee;">👤</div>
+        <div class="screen-info"><div class="screen-name">Профиль ментора</div><div class="screen-desc">Экспертиза и AI-совместимость</div></div>
+      </a>
+      <a href="mentor-join.html" class="screen-card">
+        <div class="screen-preview" style="background:#12151f;">✦</div>
+        <div class="screen-info"><div class="screen-name">Стать ментором</div><div class="screen-desc">Лендинг с моделями участия</div></div>
+      </a>
+    </div>
+
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-3);margin-bottom:12px;">Операционная система фонда</div>
+    <div class="screens-grid">
+      <a href="funnel.html" class="screen-card">
+        <div class="screen-preview" style="background:#fffbeb;">🔄</div>
+        <div class="screen-info"><div class="screen-name">Воронка фонда</div><div class="screen-desc">Kanban от заявки до сделки</div></div>
+      </a>
+      <a href="ai-match.html" class="screen-card">
+        <div class="screen-preview" style="background:#eef1fd;">🤖</div>
+        <div class="screen-info"><div class="screen-name">AI-подбор ментора</div><div class="screen-desc">% совпадения с объяснением</div></div>
+      </a>
+      <a href="portfolio.html" class="screen-card">
+        <div class="screen-preview" style="background:#f0fdf4;">💼</div>
+        <div class="screen-info"><div class="screen-name">Портфельная компания</div><div class="screen-desc">Метрики, график, сделка</div></div>
+      </a>
+      <a href="monthly-update.html" class="screen-card">
+        <div class="screen-preview" style="background:#fef3c7;">📊</div>
+        <div class="screen-info"><div class="screen-name">Monthly Update</div><div class="screen-desc">Журнал с AI summary</div></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="footer-logo">brainbox<span>_I</span></div>
+      <div class="footer-sub">Умный венчурный фонд<br>1.brainbox.vc</div>
+    </div>
+    <div class="footer-links-group">
+      <div class="footer-links-title">Стартапам</div>
+      <a href="apply.html" class="footer-link">Подать заявку</a>
+      <a href="founders.html" class="footer-link">Кабинет фаундера</a>
+      <a href="funnel.html" class="footer-link">Воронка фонда</a>
+    </div>
+    <div class="footer-links-group">
+      <div class="footer-links-title">Менторам</div>
+      <a href="mentor-join.html" class="footer-link">Стать ментором</a>
+      <a href="mentors.html" class="footer-link">Кабинет ментора</a>
+      <a href="mentor-profile.html" class="footer-link">Профиль ментора</a>
+    </div>
+    <div class="footer-links-group">
+      <div class="footer-links-title">Фонд</div>
+      <a href="portfolio.html" class="footer-link">Портфель</a>
+      <a href="startup-card.html" class="footer-link">Карточка стартапа</a>
+      <a href="ai-match.html" class="footer-link">AI-подбор ментора</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    © 2025 brainbox_I · «Вместе формируем капитал, вместе защищаем его своим временем»
+  </div>
+</footer>
+
+</body>
+</html>

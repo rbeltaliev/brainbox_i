@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Портфельная компания — brainbox_I</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=Geologica:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #f4f2ee; --white: #ffffff; --text: #12151f; --text-2: #444c5e; --text-3: #8891a6;
+      --accent: #1847e3; --accent-hover: #1238c0; --accent-light: #eef1fd; --accent-muted: #c7d0f9;
+      --border: #e0dcd4; --shadow: 0 1px 3px rgba(18,21,31,.06); --shadow-md: 0 8px 32px rgba(18,21,31,.10);
+      --radius: 10px; --radius-lg: 16px; --radius-pill: 100px;
+    }
+    html { font-size: 16px; }
+    body { font-family: 'Onest', sans-serif; background: var(--bg); color: var(--text); -webkit-font-smoothing: antialiased; }
+
+    .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; height: 60px; background: rgba(244,242,238,.88); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 32px; gap: 12px; }
+    .nav-logo { font-family: 'Geologica', sans-serif; font-size: 15px; font-weight: 700; letter-spacing: -0.04em; color: var(--text); text-decoration: none; }
+    .nav-logo .i { color: var(--accent); }
+    .nav-spacer { flex: 1; }
+    .nav-tabs { display: flex; gap: 2px; }
+    .nav-tab { font-size: 13px; font-weight: 500; color: var(--text-2); text-decoration: none; padding: 6px 14px; border-radius: var(--radius-pill); }
+    .nav-tab:hover, .nav-tab.active { background: var(--accent-light); color: var(--accent); font-weight: 600; }
+    .btn { font-family: 'Onest', sans-serif; font-size: 13px; font-weight: 600; padding: 8px 18px; border-radius: var(--radius-pill); border: none; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: background .15s; }
+    .btn-primary { background: var(--accent); color: var(--white); }
+    .btn-ghost { background: none; color: var(--text-2); border: 1px solid var(--border); }
+    .btn-ghost:hover { background: var(--white); }
+
+    .page { max-width: 1100px; margin: 0 auto; padding: 80px 32px 64px; display: grid; grid-template-columns: 1fr 320px; gap: 28px; }
+
+    h1 { font-family: 'Geologica', sans-serif; font-size: 28px; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 4px; }
+    .tag { font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: var(--radius-pill); display: inline-block; }
+    .tag-green { background: #dcfce7; color: #16a34a; }
+    .tag-blue { background: var(--accent-light); color: var(--accent); }
+    .tag-grey { background: var(--bg); color: var(--text-2); border: 1px solid var(--border); }
+
+    /* HEADER */
+    .company-header { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 28px; margin-bottom: 20px; display: flex; gap: 20px; align-items: flex-start; }
+    .company-logo { width: 72px; height: 72px; border-radius: 16px; background: var(--bg); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-family: 'Geologica', sans-serif; font-size: 13px; font-weight: 800; color: var(--text-3); flex-shrink: 0; }
+    .company-desc { font-size: 14px; color: var(--text-2); line-height: 1.6; margin-top: 10px; }
+    .company-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+
+    /* METRICS GRID */
+    .metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 20px; }
+    .metric-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 18px 20px; }
+    .metric-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-3); margin-bottom: 8px; }
+    .metric-value { font-family: 'Geologica', sans-serif; font-size: 28px; font-weight: 900; letter-spacing: -0.03em; color: var(--text); margin-bottom: 4px; line-height: 1; }
+    .metric-delta { font-size: 12px; font-weight: 600; }
+    .delta-up { color: #16a34a; }
+    .delta-down { color: #dc2626; }
+
+    /* CHART PLACEHOLDER */
+    .chart-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 22px; margin-bottom: 20px; }
+    .chart-title { font-size: 14px; font-weight: 700; margin-bottom: 16px; }
+    .chart-bars { display: flex; align-items: flex-end; gap: 8px; height: 120px; }
+    .bar-group { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+    .bar { width: 100%; border-radius: 4px 4px 0 0; background: var(--accent-muted); }
+    .bar.current { background: var(--accent); }
+    .bar-label { font-size: 10px; color: var(--text-3); text-align: center; }
+
+    /* UPDATES */
+    .card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 22px; margin-bottom: 16px; }
+    .card-title { font-size: 14px; font-weight: 700; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; }
+    .update-item { padding: 16px 0; border-bottom: 1px solid var(--border); }
+    .update-item:last-child { border-bottom: none; }
+    .update-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px; }
+    .update-month { font-size: 13px; font-weight: 700; }
+    .update-date { font-size: 12px; color: var(--text-3); }
+    .update-text { font-size: 13px; color: var(--text-2); line-height: 1.55; margin-bottom: 8px; }
+    .update-risks { font-size: 12px; background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; padding: 8px 10px; color: #dc2626; margin-bottom: 6px; }
+    .update-next { font-size: 12px; background: #dcfce7; border: 1px solid #bbf7d0; border-radius: 8px; padding: 8px 10px; color: #15803d; }
+
+    /* ASIDE */
+    .aside-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px; margin-bottom: 14px; }
+    .aside-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-3); margin-bottom: 14px; }
+    .mentor-row { display: flex; gap: 10px; align-items: center; }
+    .mentor-av { width: 40px; height: 40px; border-radius: 50%; background: var(--accent-light); color: var(--accent); font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .mentor-name { font-size: 14px; font-weight: 600; }
+    .mentor-sub { font-size: 12px; color: var(--text-2); }
+    .next-call-box { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 14px; margin-top: 14px; text-align: center; }
+    .next-call-label { font-size: 11px; color: var(--text-3); margin-bottom: 4px; }
+    .next-call-date { font-size: 16px; font-weight: 700; }
+    .health-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); }
+    .health-item:last-child { border-bottom: none; }
+    .health-name { font-size: 13px; color: var(--text-2); }
+    .health-dot { width: 8px; height: 8px; border-radius: 50%; }
+    .green { background: #22c55e; }
+    .yellow { background: #f59e0b; }
+    .red { background: #ef4444; }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html" class="nav-logo">brainbox<span class="i">_I</span></a>
+  <div class="nav-spacer"></div>
+  <div class="nav-tabs">
+    <a href="#" class="nav-tab active">VOX</a>
+    <a href="#" class="nav-tab">Hiremate</a>
+    <a href="#" class="nav-tab">Indee</a>
+    <a href="#" class="nav-tab">Долгожитель</a>
+    <a href="#" class="nav-tab">Бит за Бид</a>
+  </div>
+  <a href="monthly-update.html" class="btn btn-primary" style="margin-left:16px;">+ Обновление</a>
+</nav>
+
+<div class="page">
+  <main>
+
+    <!-- HEADER -->
+    <div class="company-header">
+      <div class="company-logo">VOX</div>
+      <div style="flex:1;">
+        <h1>VOX</h1>
+        <div class="company-tags">
+          <span class="tag tag-green">Портфель · Активный</span>
+          <span class="tag tag-blue">AI / ML</span>
+          <span class="tag tag-blue">B2B SaaS</span>
+          <span class="tag tag-grey">Seed</span>
+        </div>
+        <div class="company-desc">
+          Голосовой AI-ассистент для корпоративных клиентов. Автоматизирует входящие звонки,
+          интегрируется с CRM, обучается на базе знаний компании. В портфеле с марта 2025.
+        </div>
+      </div>
+    </div>
+
+    <!-- METRICS -->
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <div class="metric-label">MRR</div>
+        <div class="metric-value">420K</div>
+        <div class="metric-delta delta-up">↑ +18% vs апрель</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Клиенты</div>
+        <div class="metric-value">18</div>
+        <div class="metric-delta delta-up">↑ +3 за месяц</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">MAU</div>
+        <div class="metric-value">2.4K</div>
+        <div class="metric-delta delta-up">↑ +22%</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Расходы/мес</div>
+        <div class="metric-value">280K</div>
+        <div class="metric-delta delta-down">↑ +12% vs план</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Burn Rate</div>
+        <div class="metric-value">−140K</div>
+        <div class="metric-delta delta-up">Сокращается</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Runway</div>
+        <div class="metric-value">8 мес</div>
+        <div class="metric-delta delta-down">Требует раунда</div>
+      </div>
+    </div>
+
+    <!-- CHART -->
+    <div class="chart-card">
+      <div class="chart-title">MRR, тыс. ₽</div>
+      <div class="chart-bars">
+        <div class="bar-group"><div class="bar" style="height:30%;"></div><div class="bar-label">Дек</div></div>
+        <div class="bar-group"><div class="bar" style="height:38%;"></div><div class="bar-label">Янв</div></div>
+        <div class="bar-group"><div class="bar" style="height:45%;"></div><div class="bar-label">Фев</div></div>
+        <div class="bar-group"><div class="bar" style="height:54%;"></div><div class="bar-label">Мар</div></div>
+        <div class="bar-group"><div class="bar" style="height:68%;"></div><div class="bar-label">Апр</div></div>
+        <div class="bar-group"><div class="bar current" style="height:84%;"></div><div class="bar-label">Май</div></div>
+      </div>
+    </div>
+
+    <!-- UPDATES -->
+    <div class="card">
+      <div class="card-title">
+        История обновлений
+        <a href="monthly-update.html" class="btn btn-ghost" style="font-size:12px;padding:5px 12px;">Все →</a>
+      </div>
+
+      <div class="update-item">
+        <div class="update-top">
+          <div class="update-month">Май 2025</div>
+          <div class="update-date">31 мая · Ринат Шамсиев</div>
+        </div>
+        <div class="update-text">
+          Вышли на 18 корпоративных клиентов (+3 за месяц). Запустили пилот с двумя Enterprise-компаниями в сегменте финансов. MRR 420K — рост 18%. Ринат помог выстроить процесс pre-sales и квалификации Enterprise-лидов.
+        </div>
+        <div class="update-risks">⚠ Риск: расходы выше плана на 12% из-за найма двух продажников раньше срока</div>
+        <div class="update-next">→ Следующий шаг: закрыть первый Enterprise-контракт на 300K ₽/мес до конца июня</div>
+      </div>
+
+      <div class="update-item">
+        <div class="update-top">
+          <div class="update-month">Апрель 2025</div>
+          <div class="update-date">30 апр · Ринат Шамсиев</div>
+        </div>
+        <div class="update-text">
+          15 клиентов, MRR 354K (+22%). Сформирована структура Enterprise-продаж: SDR → AE → CS. Ринат провёл workshop по построению value proposition для корпоративной аудитории.
+        </div>
+        <div class="update-next">→ Следующий шаг: выйти на 3 новых клиента в мае и запустить Enterprise-пилоты</div>
+      </div>
+
+    </div>
+  </main>
+
+  <aside>
+
+    <!-- MENTOR -->
+    <div class="aside-card">
+      <div class="aside-title">Ментор</div>
+      <div class="mentor-row">
+        <div class="mentor-av">РШ</div>
+        <div>
+          <div class="mentor-name">Ринат Шамсиев</div>
+          <div class="mentor-sub">CEO Zvonobot · Трекер ФРИИ</div>
+        </div>
+      </div>
+      <div class="next-call-box">
+        <div class="next-call-label">Следующий звонок</div>
+        <div class="next-call-date">15 июня, 11:00</div>
+      </div>
+      <div style="margin-top:10px;">
+        <a href="mentor-profile.html" class="btn btn-ghost" style="width:100%;justify-content:center;font-size:12px;">Профиль ментора</a>
+      </div>
+    </div>
+
+    <!-- HEALTH -->
+    <div class="aside-card">
+      <div class="aside-title">Здоровье компании</div>
+      <div class="health-item"><span class="health-name">Рост выручки</span><div class="health-dot green"></div></div>
+      <div class="health-item"><span class="health-name">Retention клиентов</span><div class="health-dot green"></div></div>
+      <div class="health-item"><span class="health-name">Burn rate</span><div class="health-dot yellow"></div></div>
+      <div class="health-item"><span class="health-name">Runway</span><div class="health-dot yellow"></div></div>
+      <div class="health-item"><span class="health-name">Команда</span><div class="health-dot green"></div></div>
+      <div class="health-item"><span class="health-name">Enterprise pipeline</span><div class="health-dot yellow"></div></div>
+    </div>
+
+    <!-- DEAL -->
+    <div class="aside-card">
+      <div class="aside-title">Параметры сделки</div>
+      <div style="font-size:13px;display:flex;flex-direction:column;gap:8px;">
+        <div style="display:flex;justify-content:space-between;"><span style="color:var(--text-2);">Инвестиция</span><span style="font-weight:700;">15 млн ₽</span></div>
+        <div style="display:flex;justify-content:space-between;"><span style="color:var(--text-2);">Доля фонда</span><span style="font-weight:700;">10%</span></div>
+        <div style="display:flex;justify-content:space-between;"><span style="color:var(--text-2);">Доля ментора</span><span style="font-weight:700;">1%</span></div>
+        <div style="display:flex;justify-content:space-between;"><span style="color:var(--text-2);">Дата входа</span><span style="font-weight:700;">Март 2025</span></div>
+        <div style="display:flex;justify-content:space-between;"><span style="color:var(--text-2);">Оценка входа</span><span style="font-weight:700;">150 млн ₽</span></div>
+      </div>
+    </div>
+
+  </aside>
+</div>
+
+</body>
+</html>

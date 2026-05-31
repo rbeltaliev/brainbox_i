@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Профиль ментора — brainbox_I</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=Geologica:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #f4f2ee; --white: #ffffff; --text: #12151f; --text-2: #444c5e; --text-3: #8891a6;
+      --accent: #1847e3; --accent-hover: #1238c0; --accent-light: #eef1fd; --accent-muted: #c7d0f9;
+      --border: #e0dcd4; --shadow: 0 1px 3px rgba(18,21,31,.06); --shadow-md: 0 8px 32px rgba(18,21,31,.10);
+      --radius: 10px; --radius-lg: 16px; --radius-pill: 100px;
+    }
+    html { font-size: 16px; }
+    body { font-family: 'Onest', sans-serif; background: var(--bg); color: var(--text); -webkit-font-smoothing: antialiased; }
+
+    .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; height: 60px; background: rgba(244,242,238,.88); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 32px; gap: 12px; }
+    .nav-logo { font-family: 'Geologica', sans-serif; font-size: 15px; font-weight: 700; letter-spacing: -0.04em; color: var(--text); text-decoration: none; }
+    .nav-logo .i { color: var(--accent); }
+    .nav-spacer { flex: 1; }
+    .btn { font-family: 'Onest', sans-serif; font-size: 13px; font-weight: 600; padding: 8px 18px; border-radius: var(--radius-pill); border: none; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: background .15s; }
+    .btn-primary { background: var(--accent); color: var(--white); }
+    .btn-primary:hover { background: var(--accent-hover); }
+    .btn-ghost { background: none; color: var(--text-2); border: 1px solid var(--border); }
+    .btn-ghost:hover { background: var(--white); }
+    .btn-lg { padding: 12px 24px; font-size: 14px; }
+
+    .page { max-width: 1000px; margin: 0 auto; padding: 80px 32px 64px; display: grid; grid-template-columns: 1fr 300px; gap: 28px; }
+
+    /* PROFILE HEADER */
+    .profile-header { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 32px; margin-bottom: 20px; }
+    .profile-top { display: flex; gap: 24px; align-items: flex-start; margin-bottom: 20px; }
+    .profile-av { width: 88px; height: 88px; border-radius: 50%; background: var(--accent-light); border: 3px solid var(--accent-muted); display: flex; align-items: center; justify-content: center; font-family: 'Geologica', sans-serif; font-size: 24px; font-weight: 800; color: var(--accent); flex-shrink: 0; }
+    h1 { font-family: 'Geologica', sans-serif; font-size: 28px; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 4px; }
+    .profile-title { font-size: 15px; color: var(--text-2); margin-bottom: 10px; line-height: 1.4; }
+    .profile-model { font-size: 12px; font-weight: 600; padding: 4px 12px; border-radius: var(--radius-pill); background: var(--bg); color: var(--text-2); border: 1px solid var(--border); display: inline-block; margin-bottom: 12px; }
+    .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+    .tag { font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: var(--radius-pill); display: inline-block; }
+    .tag-blue { background: var(--accent-light); color: var(--accent); }
+    .tag-grey { background: var(--bg); color: var(--text-2); border: 1px solid var(--border); }
+    .tag-green { background: #dcfce7; color: #16a34a; }
+    .profile-bio { font-size: 15px; color: var(--text-2); line-height: 1.65; padding-top: 20px; border-top: 1px solid var(--border); }
+
+    /* CARD */
+    .card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 22px; margin-bottom: 16px; }
+    .card-title { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-3); margin-bottom: 16px; }
+
+    /* EXPERTISE */
+    .exp-list { display: flex; flex-direction: column; gap: 12px; }
+    .exp-item { padding: 14px; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); }
+    .exp-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+    .exp-desc { font-size: 13px; color: var(--text-2); line-height: 1.5; }
+
+    /* CASES */
+    .case-list { display: flex; flex-direction: column; gap: 10px; }
+    .case-item { display: flex; gap: 12px; align-items: flex-start; padding: 14px; background: var(--bg); border-radius: var(--radius); border: 1px solid var(--border); }
+    .case-icon { font-size: 20px; flex-shrink: 0; }
+    .case-name { font-size: 14px; font-weight: 600; margin-bottom: 3px; }
+    .case-result { font-size: 13px; color: var(--text-2); line-height: 1.4; }
+    .case-delta { font-size: 12px; color: #16a34a; font-weight: 600; margin-top: 4px; }
+
+    /* PORTFOLIO */
+    .portfolio-item { display: flex; gap: 12px; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border); }
+    .portfolio-item:last-child { border-bottom: none; }
+    .p-logo { width: 36px; height: 36px; border-radius: 8px; background: var(--bg); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 800; color: var(--text-3); flex-shrink: 0; }
+    .p-name { font-size: 14px; font-weight: 600; }
+    .p-role { font-size: 12px; color: var(--text-2); }
+    .p-status { margin-left: auto; }
+
+    /* ASIDE */
+    .aside-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px; margin-bottom: 14px; }
+    .aside-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-3); margin-bottom: 14px; }
+    .stat-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
+    .stat-row:last-child { border-bottom: none; }
+    .stat-key { color: var(--text-2); }
+    .stat-val { font-weight: 700; }
+    .contact-row { display: flex; gap: 8px; align-items: center; padding: 8px 0; font-size: 13px; color: var(--text-2); border-bottom: 1px solid var(--border); }
+    .contact-row:last-child { border-bottom: none; }
+    .contact-icon { font-size: 14px; flex-shrink: 0; }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html" class="nav-logo">brainbox<span class="i">_I</span></a>
+  <div class="nav-spacer"></div>
+  <a href="mentors.html" class="btn btn-ghost">← Все менторы</a>
+  <a href="ai-match.html" class="btn btn-primary">Связаться</a>
+</nav>
+
+<div class="page">
+  <main>
+
+    <!-- HEADER -->
+    <div class="profile-header">
+      <div class="profile-top">
+        <div class="profile-av">РШ</div>
+        <div style="flex:1;">
+          <h1>Ринат Шамсиев</h1>
+          <div class="profile-title">Ведущий трекер «Акселератора ФРИИ» · Основатель и CEO Zvonobot</div>
+          <div class="profile-model">Время в обмен на долю</div>
+          <div class="tags">
+            <span class="tag tag-blue">Enterprise Sales</span>
+            <span class="tag tag-blue">B2B SaaS</span>
+            <span class="tag tag-blue">Трекинг</span>
+            <span class="tag tag-blue">Unit Economics</span>
+            <span class="tag tag-blue">ФРИИ</span>
+            <span class="tag tag-grey">AI / ML</span>
+            <span class="tag tag-grey">Голосовые технологии</span>
+          </div>
+        </div>
+      </div>
+      <div class="profile-bio">
+        Ведущий трекер акселератора ФРИИ с опытом работы с 500+ технологическими компаниями. Основатель и CEO Zvonobot — платформы голосового маркетинга с капитализацией 500+ млн ₽. Специализируется на помощи B2B SaaS компаниям в переходе от SMB к Enterprise-сегменту и построении корпоративного цикла продаж. Ментор фонда brainbox_I с марта 2025 года.
+      </div>
+    </div>
+
+    <!-- EXPERTISE -->
+    <div class="card">
+      <div class="card-title">Экспертиза</div>
+      <div class="exp-list">
+        <div class="exp-item">
+          <div class="exp-title">Enterprise Sales & B2B SaaS</div>
+          <div class="exp-desc">Помог 80+ компаниям выйти из SMB в Enterprise. Знает специфику корпоративного цикла продаж 3–12 месяцев, квалификации лидов и построения SDR/AE структуры.</div>
+        </div>
+        <div class="exp-item">
+          <div class="exp-title">Unit Economics и трекинг метрик</div>
+          <div class="exp-desc">Выстраивает систему продуктовых метрик, unit-экономику и KPI для подготовки к раундам Series A и Series B. 500+ компаний прошли через его трекинг в ФРИИ.</div>
+        </div>
+        <div class="exp-item">
+          <div class="exp-title">Голосовые технологии и AI</div>
+          <div class="exp-desc">Практик: построил Zvonobot с нуля до 500+ млн ₽ капитализации. Понимает рынок AI и голосовых продуктов изнутри.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CASES -->
+    <div class="card">
+      <div class="card-title">Кейсы менторства</div>
+      <div class="case-list">
+        <div class="case-item">
+          <div class="case-icon">📦</div>
+          <div>
+            <div class="case-name">B2B SaaS для логистики</div>
+            <div class="case-result">Компания переходила от 30 SMB-клиентов к Enterprise. За 6 месяцев выстроили процесс корпоративных продаж и закрыли 3 контракта по 500K ₽/мес.</div>
+            <div class="case-delta">↑ MRR ×4 за 6 месяцев менторства</div>
+          </div>
+        </div>
+        <div class="case-item">
+          <div class="case-icon">🤖</div>
+          <div>
+            <div class="case-name">AI-платформа для HR</div>
+            <div class="case-result">Помог сформулировать value proposition для корпоративных HR-директоров. Результат — пилот с двумя компаниями из Forbes 100.</div>
+            <div class="case-delta">↑ Первые Enterprise-пилоты через 4 месяца</div>
+          </div>
+        </div>
+        <div class="case-item">
+          <div class="case-icon">📞</div>
+          <div>
+            <div class="case-name">Zvonobot (собственный проект)</div>
+            <div class="case-result">Построил с нуля платформу голосового маркетинга. Прошёл путь от 0 до 1000+ корпоративных клиентов и капитализации 500+ млн ₽.</div>
+            <div class="case-delta">Капитализация 500+ млн ₽ · 1000+ корпоративных клиентов</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PORTFOLIO IN FUND -->
+    <div class="card">
+      <div class="card-title">Стартапы в фонде</div>
+      <div class="portfolio-item">
+        <div class="p-logo">VOX</div>
+        <div>
+          <div class="p-name">VOX</div>
+          <div class="p-role">Ментор · Enterprise Sales · с марта 2025</div>
+        </div>
+        <div class="p-status"><span class="tag tag-green">Активный</span></div>
+      </div>
+    </div>
+
+  </main>
+
+  <aside>
+
+    <div class="aside-card">
+      <div class="aside-title">Статистика</div>
+      <div class="stat-row"><span class="stat-key">Стартапов променторировано</span><span class="stat-val">500+</span></div>
+      <div class="stat-row"><span class="stat-key">Лет в трекинге</span><span class="stat-val">10+</span></div>
+      <div class="stat-row"><span class="stat-key">В фонде с</span><span class="stat-val">Февр. 2025</span></div>
+      <div class="stat-row"><span class="stat-key">Стартапов в портфеле</span><span class="stat-val">1</span></div>
+      <div class="stat-row"><span class="stat-key">Модель участия</span><span class="stat-val">Время за долю</span></div>
+    </div>
+
+    <div class="aside-card">
+      <div class="aside-title">Контакты</div>
+      <div class="contact-row"><span class="contact-icon">💬</span>@rinat_shamsiev</div>
+      <div class="contact-row"><span class="contact-icon">📧</span>r@zvonobot.ru</div>
+      <div class="contact-row"><span class="contact-icon">🌐</span>zvonobot.ru</div>
+    </div>
+
+    <div class="aside-card">
+      <div class="aside-title">Доступность</div>
+      <div style="font-size:13px;color:var(--text-2);line-height:1.6;margin-bottom:14px;">
+        Готов взять 1–2 стартапа в менторство. Формат: ежемесячный звонок 45–60 мин + async в Telegram.
+      </div>
+      <a href="ai-match.html" class="btn btn-primary" style="width:100%;justify-content:center;">Предложить стартап</a>
+    </div>
+
+    <div class="aside-card" style="background:var(--dark,#12151f);border-color:#12151f;">
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:rgba(255,255,255,.35);margin-bottom:10px;">AI-совместимость</div>
+      <div style="font-size:28px;font-weight:900;font-family:'Geologica',sans-serif;color:#ffffff;letter-spacing:-0.03em;margin-bottom:4px;">92%</div>
+      <div style="font-size:12px;color:rgba(255,255,255,.5);">Совпадение с гипотезой роста VOX</div>
+      <div style="margin-top:12px;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:12px;color:rgba(255,255,255,.6);display:flex;gap:6px;"><span style="color:#22c55e;">✓</span>Enterprise Sales опыт</div>
+        <div style="font-size:12px;color:rgba(255,255,255,.6);display:flex;gap:6px;"><span style="color:#22c55e;">✓</span>B2B SaaS переход</div>
+        <div style="font-size:12px;color:rgba(255,255,255,.6);display:flex;gap:6px;"><span style="color:#22c55e;">✓</span>AI/Voice рынок</div>
+        <div style="font-size:12px;color:rgba(255,255,255,.6);display:flex;gap:6px;"><span style="color:#22c55e;">✓</span>500+ компаний трекинг</div>
+      </div>
+    </div>
+
+  </aside>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Monthly Update — brainbox_I</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=Geologica:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #f4f2ee; --white: #ffffff; --text: #12151f; --text-2: #444c5e; --text-3: #8891a6;
+      --accent: #1847e3; --accent-hover: #1238c0; --accent-light: #eef1fd; --accent-muted: #c7d0f9;
+      --border: #e0dcd4; --shadow: 0 1px 3px rgba(18,21,31,.06); --shadow-md: 0 8px 32px rgba(18,21,31,.10);
+      --radius: 10px; --radius-lg: 16px; --radius-pill: 100px;
+    }
+    html { font-size: 16px; }
+    body { font-family: 'Onest', sans-serif; background: var(--bg); color: var(--text); -webkit-font-smoothing: antialiased; }
+
+    .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; height: 60px; background: rgba(244,242,238,.88); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 32px; gap: 12px; }
+    .nav-logo { font-family: 'Geologica', sans-serif; font-size: 15px; font-weight: 700; letter-spacing: -0.04em; color: var(--text); text-decoration: none; }
+    .nav-logo .i { color: var(--accent); }
+    .nav-spacer { flex: 1; }
+    .nav-breadcrumb { font-size: 13px; color: var(--text-3); display: flex; align-items: center; gap: 6px; }
+    .nav-breadcrumb a { color: var(--text-2); text-decoration: none; }
+    .nav-breadcrumb a:hover { color: var(--accent); }
+    .btn { font-family: 'Onest', sans-serif; font-size: 13px; font-weight: 600; padding: 8px 18px; border-radius: var(--radius-pill); border: none; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: background .15s; }
+    .btn-primary { background: var(--accent); color: var(--white); }
+    .btn-primary:hover { background: var(--accent-hover); }
+    .btn-ghost { background: none; color: var(--text-2); border: 1px solid var(--border); }
+    .btn-ghost:hover { background: var(--white); }
+
+    .page { max-width: 960px; margin: 0 auto; padding: 80px 32px 64px; display: grid; grid-template-columns: 1fr 280px; gap: 28px; }
+
+    /* JOURNAL TIMELINE */
+    .timeline { position: relative; }
+    .tl-entry { position: relative; padding-left: 40px; margin-bottom: 36px; }
+    .tl-entry::before { content: ''; position: absolute; left: 13px; top: 28px; bottom: -36px; width: 1px; background: var(--border); }
+    .tl-entry:last-child::before { display: none; }
+    .tl-dot { position: absolute; left: 0; top: 12px; width: 28px; height: 28px; border-radius: 50%; background: var(--white); border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 11px; color: var(--text-3); z-index: 1; }
+    .tl-dot.active { background: var(--accent); border-color: var(--accent); color: var(--white); }
+    .tl-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 22px 24px; }
+    .tl-card.active { border-color: var(--accent-muted); }
+    .tl-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
+    .tl-month { font-family: 'Geologica', sans-serif; font-size: 18px; font-weight: 800; letter-spacing: -0.02em; }
+    .tl-meta { font-size: 12px; color: var(--text-3); text-align: right; }
+    .tl-mentor { font-size: 12px; color: var(--text-2); font-weight: 500; }
+
+    /* AI SUMMARY */
+    .ai-block { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; margin-bottom: 16px; }
+    .ai-block-title { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; }
+    .ai-icon { font-size: 14px; }
+    .ai-text { font-size: 13px; color: var(--text-2); line-height: 1.6; }
+
+    .risk-block { background: #fef2f2; border: 1px solid #fecaca; border-radius: var(--radius); padding: 14px; margin-bottom: 12px; }
+    .risk-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #dc2626; margin-bottom: 8px; }
+    .risk-list { display: flex; flex-direction: column; gap: 5px; }
+    .risk-item { font-size: 13px; color: #7f1d1d; line-height: 1.4; display: flex; gap: 6px; }
+    .risk-item::before { content: '⚠'; flex-shrink: 0; }
+
+    .next-block { background: #dcfce7; border: 1px solid #bbf7d0; border-radius: var(--radius); padding: 14px; margin-bottom: 12px; }
+    .next-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #15803d; margin-bottom: 8px; }
+    .next-list { display: flex; flex-direction: column; gap: 5px; }
+    .next-item { font-size: 13px; color: #14532d; line-height: 1.4; display: flex; gap: 6px; }
+    .next-item::before { content: '→'; flex-shrink: 0; font-weight: 700; }
+
+    .help-block { background: var(--accent-light); border: 1px solid var(--accent-muted); border-radius: var(--radius); padding: 14px; margin-bottom: 16px; }
+    .help-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent); margin-bottom: 8px; }
+    .help-item { font-size: 13px; color: var(--accent); line-height: 1.4; display: flex; gap: 6px; }
+    .help-item::before { content: '🙋'; flex-shrink: 0; }
+
+    /* UPLOAD */
+    .upload-card { background: var(--white); border: 2px dashed var(--border); border-radius: var(--radius-lg); padding: 32px; text-align: center; margin-bottom: 20px; }
+    .upload-icon { font-size: 32px; margin-bottom: 12px; }
+    .upload-title { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
+    .upload-desc { font-size: 13px; color: var(--text-2); margin-bottom: 16px; line-height: 1.4; }
+
+    /* METRICS ROW */
+    .metrics-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 16px; }
+    .metric-mini { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 10px 12px; }
+    .m-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-3); margin-bottom: 4px; }
+    .m-value { font-size: 16px; font-weight: 800; font-family: 'Geologica', sans-serif; letter-spacing: -0.02em; }
+    .m-delta { font-size: 11px; font-weight: 600; }
+    .up { color: #16a34a; }
+    .down { color: #dc2626; }
+
+    /* ASIDE */
+    .aside { }
+    .aside-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 18px; margin-bottom: 14px; }
+    .aside-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-3); margin-bottom: 14px; }
+    .aside-link { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text-2); text-decoration: none; padding: 8px 0; border-bottom: 1px solid var(--border); }
+    .aside-link:last-child { border-bottom: none; }
+    .aside-link:hover { color: var(--accent); }
+    .aside-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+    .aside-dot.grey { background: var(--text-3); }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html" class="nav-logo">brainbox<span class="i">_I</span></a>
+  <div class="nav-breadcrumb">
+    <span>/</span>
+    <a href="portfolio.html">VOX</a>
+    <span>/</span>
+    <span>Monthly Updates</span>
+  </div>
+  <div class="nav-spacer"></div>
+  <a href="#upload" class="btn btn-primary">+ Добавить обновление</a>
+</nav>
+
+<div class="page">
+  <main>
+    <div style="margin-bottom:28px;">
+      <h1 style="font-family:'Geologica',sans-serif;font-size:26px;font-weight:800;letter-spacing:-0.03em;margin-bottom:4px;">Журнал развития · VOX</h1>
+      <p style="font-size:14px;color:var(--text-2);">Ежемесячные отчёты с AI-анализом · Ментор: Ринат Шамсиев</p>
+    </div>
+
+    <!-- UPLOAD NEW -->
+    <div class="upload-card" id="upload">
+      <div class="upload-icon">🎙</div>
+      <div class="upload-title">Загрузить транскрипт звонка</div>
+      <div class="upload-desc">Загрузите транскрипт или запись звонка с ментором.<br>AI автоматически составит summary, выделит риски и следующие шаги.</div>
+      <div style="display:flex;gap:8px;justify-content:center;">
+        <button class="btn btn-primary">Загрузить файл</button>
+        <button class="btn btn-ghost">Вставить текст</button>
+      </div>
+    </div>
+
+    <!-- TIMELINE -->
+    <div class="timeline">
+
+      <!-- MAY 2025 — CURRENT -->
+      <div class="tl-entry">
+        <div class="tl-dot active">●</div>
+        <div class="tl-card active">
+          <div class="tl-header">
+            <div>
+              <div class="tl-month">Май 2025</div>
+              <div class="tl-mentor">Ментор: Ринат Шамсиев · 31 мая 2025</div>
+            </div>
+            <div class="tl-meta">Звонок 45 мин<br>Транскрипт загружен</div>
+          </div>
+
+          <div class="metrics-row">
+            <div class="metric-mini">
+              <div class="m-label">MRR</div>
+              <div class="m-value">420K</div>
+              <div class="m-delta up">↑ +18%</div>
+            </div>
+            <div class="metric-mini">
+              <div class="m-label">Клиенты</div>
+              <div class="m-value">18</div>
+              <div class="m-delta up">↑ +3</div>
+            </div>
+            <div class="metric-mini">
+              <div class="m-label">Burn rate</div>
+              <div class="m-value">280K</div>
+              <div class="m-delta down">↑ выше</div>
+            </div>
+          </div>
+
+          <div class="ai-block">
+            <div class="ai-block-title"><span class="ai-icon">🤖</span> AI Summary</div>
+            <div class="ai-text">
+              Сильный месяц по выручке и новым клиентам. Команда запустила пилот с двумя Enterprise-компаниями в финансовом секторе. Ринат помог выстроить SDR-процесс и квалификацию лидов. Главная проблема — расходы выросли из-за раннего найма продажников. Runway сократился до 8 месяцев — нужно ускорить закрытие раунда.
+            </div>
+          </div>
+
+          <div class="risk-block">
+            <div class="risk-title">Риски</div>
+            <div class="risk-list">
+              <div class="risk-item">Расходы выше плана на 12% — два новых SDR наняты раньше срока</div>
+              <div class="risk-item">Enterprise-пилоты затягиваются — цикл сделки дольше прогнозируемого</div>
+            </div>
+          </div>
+
+          <div class="help-block">
+            <div class="help-title">Запросы на помощь</div>
+            <div class="help-item">Нужны тёплые интро к CISO в крупных банках для Enterprise-пилота</div>
+          </div>
+
+          <div class="next-block">
+            <div class="next-title">Следующие шаги (AI)</div>
+            <div class="next-list">
+              <div class="next-item">Закрыть первый Enterprise-контракт на 300K ₽/мес до 30 июня</div>
+              <div class="next-item">Запустить fundraising deck и начать переговоры с 3 фондами</div>
+              <div class="next-item">Оптимизировать SDR-процесс: сократить цикл квалификации с 14 до 7 дней</div>
+            </div>
+          </div>
+
+          <div style="display:flex;gap:8px;">
+            <a href="#" class="btn btn-ghost" style="font-size:12px;">Скачать отчёт</a>
+            <a href="#" class="btn btn-ghost" style="font-size:12px;">Транскрипт</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- APRIL 2025 -->
+      <div class="tl-entry">
+        <div class="tl-dot">✓</div>
+        <div class="tl-card">
+          <div class="tl-header">
+            <div>
+              <div class="tl-month">Апрель 2025</div>
+              <div class="tl-mentor">Ментор: Ринат Шамсиев · 30 апреля 2025</div>
+            </div>
+            <div class="tl-meta">Звонок 38 мин<br>Транскрипт загружен</div>
+          </div>
+
+          <div class="metrics-row">
+            <div class="metric-mini">
+              <div class="m-label">MRR</div>
+              <div class="m-value">354K</div>
+              <div class="m-delta up">↑ +22%</div>
+            </div>
+            <div class="metric-mini">
+              <div class="m-label">Клиенты</div>
+              <div class="m-value">15</div>
+              <div class="m-delta up">↑ +4</div>
+            </div>
+            <div class="metric-mini">
+              <div class="m-label">Burn rate</div>
+              <div class="m-value">250K</div>
+              <div class="m-delta up">В плане</div>
+            </div>
+          </div>
+
+          <div class="ai-block">
+            <div class="ai-block-title"><span class="ai-icon">🤖</span> AI Summary</div>
+            <div class="ai-text">Лучший месяц по росту клиентов — +4 за апрель. Ринат провёл workshop по value proposition для Enterprise. Сформирована структура продаж SDR → AE → CS. Runway комфортный — 11 месяцев.</div>
+          </div>
+
+          <div class="next-block">
+            <div class="next-title">Итог</div>
+            <div class="next-list">
+              <div class="next-item">Выйти на 3 Enterprise-пилота в мае</div>
+              <div class="next-item">Нанять второго SDR до 15 мая</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MARCH 2025 -->
+      <div class="tl-entry">
+        <div class="tl-dot">✓</div>
+        <div class="tl-card">
+          <div class="tl-header">
+            <div>
+              <div class="tl-month">Март 2025 — первый звонок с ментором</div>
+              <div class="tl-mentor">Ментор: Ринат Шамсиев · 31 марта 2025</div>
+            </div>
+            <div class="tl-meta">Звонок 60 мин<br>Транскрипт загружен</div>
+          </div>
+
+          <div class="metrics-row">
+            <div class="metric-mini">
+              <div class="m-label">MRR</div>
+              <div class="m-value">290K</div>
+              <div class="m-delta up">База</div>
+            </div>
+            <div class="metric-mini">
+              <div class="m-label">Клиенты</div>
+              <div class="m-value">11</div>
+              <div class="m-delta up">База</div>
+            </div>
+            <div class="metric-mini">
+              <div class="m-label">Burn rate</div>
+              <div class="m-value">240K</div>
+              <div class="m-delta up">В плане</div>
+            </div>
+          </div>
+
+          <div class="ai-block">
+            <div class="ai-block-title"><span class="ai-icon">🤖</span> AI Summary</div>
+            <div class="ai-text">Установочный звонок. Ринат изучил бизнес, согласовали фокус — переход от SMB к Enterprise. Определили первые 10 Enterprise-лидов для проработки. Хорошая команда, сильный продукт, слабое понимание Enterprise-специфики.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <aside>
+    <div class="aside-card">
+      <div class="aside-title">Навигация</div>
+      <a href="portfolio.html" class="aside-link"><div class="aside-dot"></div>Метрики компании</a>
+      <a href="startup-card.html" class="aside-link"><div class="aside-dot"></div>Карточка стартапа</a>
+      <a href="mentor-profile.html" class="aside-link"><div class="aside-dot"></div>Профиль ментора</a>
+    </div>
+    <div class="aside-card">
+      <div class="aside-title">Активность</div>
+      <div style="font-size:13px;color:var(--text-2);display:flex;flex-direction:column;gap:8px;">
+        <div style="display:flex;justify-content:space-between;"><span>Звонков проведено</span><strong>3</strong></div>
+        <div style="display:flex;justify-content:space-between;"><span>Транскриптов загружено</span><strong>3</strong></div>
+        <div style="display:flex;justify-content:space-between;"><span>Задач выполнено</span><strong>7 / 11</strong></div>
+        <div style="display:flex;justify-content:space-between;"><span>Запросов на помощь</span><strong>1</strong></div>
+      </div>
+    </div>
+    <div class="aside-card">
+      <div class="aside-title">Следующий звонок</div>
+      <div style="text-align:center;padding:8px 0;">
+        <div style="font-size:22px;font-weight:800;font-family:'Geologica',sans-serif;letter-spacing:-0.02em;">15 июня</div>
+        <div style="font-size:13px;color:var(--text-2);margin-top:2px;">11:00 · Ринат Шамсиев</div>
+        <div style="margin-top:12px;"><a href="#" class="btn btn-ghost" style="width:100%;justify-content:center;font-size:12px;">Открыть в календаре</a></div>
+      </div>
+    </div>
+  </aside>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Стать ментором — brainbox_I</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=Geologica:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #f4f2ee; --white: #ffffff; --dark: #12151f; --text: #12151f; --text-2: #444c5e; --text-3: #8891a6;
+      --accent: #1847e3; --accent-hover: #1238c0; --accent-light: #eef1fd; --accent-muted: #c7d0f9;
+      --border: #e0dcd4; --shadow: 0 1px 3px rgba(18,21,31,.06); --shadow-md: 0 8px 32px rgba(18,21,31,.10);
+      --radius: 10px; --radius-lg: 16px; --radius-pill: 100px;
+    }
+    html { font-size: 16px; scroll-behavior: smooth; }
+    body { font-family: 'Onest', sans-serif; background: var(--bg); color: var(--text); -webkit-font-smoothing: antialiased; }
+
+    .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; height: 60px; background: rgba(244,242,238,.88); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 32px; gap: 12px; }
+    .nav-logo { font-family: 'Geologica', sans-serif; font-size: 15px; font-weight: 700; letter-spacing: -0.04em; color: var(--text); text-decoration: none; }
+    .nav-logo .i { color: var(--accent); }
+    .nav-spacer { flex: 1; }
+    .btn { font-family: 'Onest', sans-serif; font-size: 14px; font-weight: 600; padding: 9px 20px; border-radius: var(--radius-pill); border: none; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: background .15s; }
+    .btn-primary { background: var(--accent); color: var(--white); }
+    .btn-primary:hover { background: var(--accent-hover); }
+    .btn-ghost { background: none; color: var(--text-2); border: 1px solid var(--border); }
+    .btn-ghost:hover { background: var(--white); }
+    .btn-white { background: var(--white); color: var(--text); }
+    .btn-white:hover { background: var(--bg); }
+    .btn-lg { padding: 14px 32px; font-size: 15px; }
+
+    /* HERO */
+    .hero { background: var(--dark); padding: 120px 32px 96px; text-align: center; }
+    .hero-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.12); border-radius: var(--radius-pill); padding: 5px 14px 5px 10px; font-size: 12px; font-weight: 500; color: rgba(255,255,255,.6); margin-bottom: 32px; }
+    .hero-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+    .hero h1 { font-family: 'Geologica', sans-serif; font-size: clamp(36px, 6vw, 68px); font-weight: 900; letter-spacing: -0.04em; line-height: 1.08; color: var(--white); margin-bottom: 20px; }
+    .hero h1 .blue { color: #6b8ff8; }
+    .hero-sub { font-size: clamp(16px, 1.8vw, 19px); color: rgba(255,255,255,.6); line-height: 1.65; max-width: 580px; margin: 0 auto 40px; }
+    .hero-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+    /* SECTION */
+    .section { padding: 80px 32px; }
+    .section-inner { max-width: 1000px; margin: 0 auto; }
+    .section-header { margin-bottom: 48px; text-align: center; }
+    .eyebrow { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--accent); margin-bottom: 12px; }
+    h2 { font-family: 'Geologica', sans-serif; font-size: clamp(28px, 4vw, 42px); font-weight: 800; letter-spacing: -0.03em; line-height: 1.12; }
+    .section-desc { font-size: 16px; color: var(--text-2); line-height: 1.65; margin-top: 12px; max-width: 560px; margin-left: auto; margin-right: auto; }
+
+    /* PRINCIPLE */
+    .principle-box { background: var(--dark); border-radius: 20px; padding: 60px; text-align: center; margin-bottom: 80px; }
+    .principle-box h2 { color: var(--white); margin-bottom: 16px; }
+    .principle-box .section-desc { color: rgba(255,255,255,.55); }
+    .principle-quote { font-family: 'Geologica', sans-serif; font-size: clamp(20px, 3vw, 28px); font-weight: 700; color: var(--white); letter-spacing: -0.02em; line-height: 1.3; margin: 28px auto; max-width: 640px; }
+    .principle-quote em { color: #6b8ff8; font-style: normal; }
+
+    /* MODELS */
+    .models-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 80px; }
+    .model-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 28px; }
+    .model-icon { font-size: 32px; margin-bottom: 16px; }
+    .model-title { font-family: 'Geologica', sans-serif; font-size: 20px; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 8px; }
+    .model-desc { font-size: 14px; color: var(--text-2); line-height: 1.6; margin-bottom: 16px; }
+    .model-example { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 10px 12px; font-size: 12px; color: var(--text-2); font-style: italic; }
+    .model-example strong { color: var(--text); }
+
+    /* HOW */
+    .how-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 80px; }
+    .how-step { text-align: center; padding: 28px 20px; background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); }
+    .how-num { width: 44px; height: 44px; border-radius: 50%; background: var(--accent-light); color: var(--accent); font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; }
+    .how-title { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+    .how-desc { font-size: 13px; color: var(--text-2); line-height: 1.5; }
+
+    /* MENTORS MINI */
+    .mentors-mini { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-bottom: 80px; }
+    .mentor-chip { display: flex; align-items: center; gap: 8px; background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-pill); padding: 6px 14px 6px 6px; }
+    .mentor-chip-av { width: 28px; height: 28px; border-radius: 50%; background: var(--accent-light); color: var(--accent); font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+    .mentor-chip-name { font-size: 13px; font-weight: 500; }
+
+    /* FORM */
+    .form-section { max-width: 640px; margin: 0 auto 80px; }
+    .form-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 40px; }
+    .form-title { font-family: 'Geologica', sans-serif; font-size: 22px; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 6px; }
+    .form-sub { font-size: 14px; color: var(--text-2); margin-bottom: 28px; line-height: 1.5; }
+    .field { margin-bottom: 18px; }
+    label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+    input[type="text"], input[type="email"], select, textarea { width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 11px 14px; font-family: 'Onest', sans-serif; font-size: 14px; color: var(--text); outline: none; transition: border-color .15s; }
+    input:focus, select:focus, textarea:focus { border-color: var(--accent); background: var(--white); box-shadow: 0 0 0 3px rgba(24,71,227,.08); }
+    textarea { min-height: 90px; resize: vertical; }
+    select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M4 6l4 4 4-4' stroke='%238891a6' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 36px; }
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .note { font-size: 12px; color: var(--text-3); margin-top: 20px; text-align: center; line-height: 1.5; }
+
+    /* FOOTER */
+    footer { border-top: 1px solid var(--border); padding: 40px 32px; text-align: center; }
+    .footer-logo { font-family: 'Geologica', sans-serif; font-size: 16px; font-weight: 700; letter-spacing: -0.04em; color: var(--text); margin-bottom: 8px; }
+    .footer-logo span { color: var(--accent); }
+    .footer-links { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-top: 16px; }
+    .footer-link { font-size: 13px; color: var(--text-2); text-decoration: none; }
+    .footer-link:hover { color: var(--accent); }
+
+    @media (max-width: 768px) {
+      .hero { padding: 100px 24px 72px; }
+      .principle-box { padding: 40px 24px; }
+      .form-card { padding: 28px 24px; }
+      .field-row { grid-template-columns: 1fr; }
+      .nav-ghost-btn { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html" class="nav-logo">brainbox<span class="i">_I</span></a>
+  <div class="nav-spacer"></div>
+  <a href="index.html" class="btn btn-ghost nav-ghost-btn" style="font-size:13px;padding:7px 16px;">← На главную</a>
+  <a href="#form" class="btn btn-primary" style="font-size:13px;padding:7px 16px;">Оставить заявку</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">
+    <span class="dot"></span>
+    Для менторов и инвесторов
+  </div>
+  <h1>Инвестируйте <span class="blue">экспертизой.</span><br>Получайте долю.</h1>
+  <p class="hero-sub">
+    Ментор brainbox_I — это не советник. Это соинвестор, который защищает капитал фонда своим временем, связями и опытом. Один стартап, один ментор, один результат.
+  </p>
+  <div class="hero-actions">
+    <a href="#form" class="btn btn-white btn-lg">Оставить заявку →</a>
+    <a href="#models" class="btn btn-lg" style="background:rgba(255,255,255,.1);color:var(--white);border:1px solid rgba(255,255,255,.15);">Узнать подробнее</a>
+  </div>
+</section>
+
+<!-- PRINCIPLE -->
+<section class="section" style="padding-bottom:0;">
+  <div class="section-inner">
+    <div class="principle-box">
+      <div class="eyebrow" style="color:rgba(255,255,255,.35);">Принцип фонда</div>
+      <h2 style="color:var(--white);">Skin in the game</h2>
+      <div class="principle-quote">
+        «Вместе формируем капитал — <em>вместе защищаем его своим временем.</em>»
+      </div>
+      <p style="font-size:15px;color:rgba(255,255,255,.5);line-height:1.65;max-width:520px;margin:0 auto;">
+        Фонд brainbox_I инвестирует в стартап только тогда, когда для него найден профильный ментор. Это не ограничение — это гарантия качества для всех участников.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- MODELS -->
+<section class="section" id="models">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="eyebrow">Модели участия</div>
+      <h2>Как стать частью фонда</h2>
+      <p class="section-desc">Мы принимаем разные форматы участия — деньги, время, ресурсы. Главное — экспертиза, которая реально помогает стартапу расти.</p>
+    </div>
+    <div class="models-grid">
+      <div class="model-card">
+        <div class="model-icon">⏱</div>
+        <div class="model-title">Время за долю</div>
+        <div class="model-desc">Вы вкладываете своё время — ежемесячные звонки, стратегические сессии, помощь с задачами. Получаете 1% годовых в стартапе и статус LP фонда.</div>
+        <div class="model-example"><strong>Пример:</strong> Ринат Шамсиев — менторит VOX 1 час/мес и получает долю в компании</div>
+      </div>
+      <div class="model-card">
+        <div class="model-icon">📡</div>
+        <div class="model-title">Ресурсы за долю</div>
+        <div class="model-desc">Вы предоставляете стартапу доступ к вашим ресурсам: серверы, медиаохват, дистрибуция, корпоративные связи. Взамен — доля в компании.</div>
+        <div class="model-example"><strong>Пример:</strong> Олег Любимов (Selectel) — серверы в обмен на долю для AI-стартапов</div>
+      </div>
+      <div class="model-card">
+        <div class="model-icon">💰</div>
+        <div class="model-title">Деньги + время</div>
+        <div class="model-desc">Классическая модель LP фонда с дополнительным менторским участием. Вы входите в капитал фонда и берёте профильный стартап в менторство.</div>
+        <div class="model-example"><strong>Пример:</strong> Людмила Булавкина — LP фонда и ментор по B2C Growth для портфельных компаний</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS FOR MENTORS -->
+<section class="section" style="background:var(--white);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding-top:72px;padding-bottom:72px;">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="eyebrow">Как это работает</div>
+      <h2>Путь ментора в фонде</h2>
+    </div>
+    <div class="how-grid">
+      <div class="how-step">
+        <div class="how-num">1</div>
+        <div class="how-title">Заявка и верификация</div>
+        <div class="how-desc">Рассматриваем по приглашению или рекомендации. Знакомимся и определяем вашу экспертизу.</div>
+      </div>
+      <div class="how-step">
+        <div class="how-num">2</div>
+        <div class="how-title">Профиль ментора</div>
+        <div class="how-desc">Заполняете профиль с экспертизой, кейсами и предпочтениями. AI использует его для матчинга.</div>
+      </div>
+      <div class="how-step">
+        <div class="how-num">3</div>
+        <div class="how-title">AI-матч со стартапом</div>
+        <div class="how-desc">Система находит стартапы, где ваша экспертиза совпадает с гипотезой роста. Вы видите процент совпадения и причины.</div>
+      </div>
+      <div class="how-step">
+        <div class="how-num">4</div>
+        <div class="how-title">Менторство и доля</div>
+        <div class="how-desc">После матча вы становитесь ментором, входите в Совет директоров. 1 звонок в месяц — транскрипт и AI-анализ.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MENTORS -->
+<section class="section">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="eyebrow">Сообщество</div>
+      <h2>Уже в фонде</h2>
+      <p class="section-desc">100+ менторов и инвесторов. Каждый — практик, который прошёл путь сам.</p>
+    </div>
+    <div class="mentors-mini">
+      <div class="mentor-chip"><div class="mentor-chip-av">ОЛ</div><span class="mentor-chip-name">Олег Любимов</span></div>
+      <div class="mentor-chip"><div class="mentor-chip-av">НК</div><span class="mentor-chip-name">Никита Комаров</span></div>
+      <div class="mentor-chip"><div class="mentor-chip-av">ПП</div><span class="mentor-chip-name">Павел Прасс</span></div>
+      <div class="mentor-chip"><div class="mentor-chip-av">МВ</div><span class="mentor-chip-name">Михаил Волков</span></div>
+      <div class="mentor-chip"><div class="mentor-chip-av">НТ</div><span class="mentor-chip-name">Никита Толстов</span></div>
+      <div class="mentor-chip"><div class="mentor-chip-av">ЛБ</div><span class="mentor-chip-name">Людмила Булавкина</span></div>
+      <div class="mentor-chip"><div class="mentor-chip-av">РШ</div><span class="mentor-chip-name">Ринат Шамсиев</span></div>
+      <div class="mentor-chip"><div class="mentor-chip-av">ДТ</div><span class="mentor-chip-name">Даурен Токтамысов</span></div>
+      <div class="mentor-chip"><div class="mentor-chip-av">СМ</div><span class="mentor-chip-name">Сергей Мазур</span></div>
+      <div class="mentor-chip"><div class="mentor-chip-av">РБ</div><span class="mentor-chip-name">Родион Брехач</span></div>
+      <div class="mentor-chip" style="background:var(--accent-light);border-color:var(--accent-muted);"><div class="mentor-chip-av">+90</div><span class="mentor-chip-name" style="color:var(--accent);">и ещё 90+ человек</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- FORM -->
+<section class="section" style="padding-top:0;" id="form">
+  <div class="form-section">
+    <div class="form-card">
+      <div class="form-title">Хочу стать ментором</div>
+      <div class="form-sub">Расскажите о себе — мы свяжемся в течение 3 рабочих дней для знакомства.</div>
+      <div class="field-row">
+        <div class="field">
+          <label>Имя и фамилия <span style="color:var(--accent);">*</span></label>
+          <input type="text" placeholder="Иван Петров">
+        </div>
+        <div class="field">
+          <label>Telegram <span style="color:var(--accent);">*</span></label>
+          <input type="text" placeholder="@username">
+        </div>
+      </div>
+      <div class="field">
+        <label>Email</label>
+        <input type="email" placeholder="ivan@company.ru">
+      </div>
+      <div class="field">
+        <label>Текущая должность и компания <span style="color:var(--accent);">*</span></label>
+        <input type="text" placeholder="CEO / Founder / Partner at ...">
+      </div>
+      <div class="field">
+        <label>Ваша ключевая экспертиза <span style="color:var(--accent);">*</span></label>
+        <textarea placeholder="В чём вы лучше всего можете помочь стартапам? Опыт, рынки, компетенции..."></textarea>
+      </div>
+      <div class="field">
+        <label>Предпочтительная модель участия</label>
+        <select>
+          <option value="">Выберите модель</option>
+          <option>Время в обмен на долю</option>
+          <option>Ресурсы в обмен на долю</option>
+          <option>Деньги + время (LP фонда)</option>
+          <option>Пока не определился</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Кто вас рекомендовал?</label>
+        <input type="text" placeholder="Имя или Telegram текущего ментора фонда">
+      </div>
+      <button class="btn btn-primary btn-lg" style="width:100%;justify-content:center;margin-top:4px;">Отправить заявку →</button>
+      <div class="note">Рассматриваем заявки по приглашению или рекомендации действующих менторов.<br>Участие — строго по решению управляющего партнёра.</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">brainbox<span>_I</span></div>
+  <div style="font-size:12px;color:var(--text-3);margin-top:4px;">Умный венчурный фонд · 1.brainbox.vc</div>
+  <div class="footer-links">
+    <a href="index.html" class="footer-link">Главная</a>
+    <a href="apply.html" class="footer-link">Подать заявку стартапу</a>
+    <a href="#mentors" class="footer-link">Менторы</a>
+    <a href="portfolio.html" class="footer-link">Портфель</a>
+  </div>
+</footer>
+
+</body>
+</html>

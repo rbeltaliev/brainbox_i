@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Кабинет ментора — brainbox_I</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=Geologica:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #f4f2ee; --white: #ffffff; --text: #12151f; --text-2: #444c5e; --text-3: #8891a6;
+      --accent: #1847e3; --accent-hover: #1238c0; --accent-light: #eef1fd; --accent-muted: #c7d0f9;
+      --border: #e0dcd4; --shadow: 0 1px 3px rgba(18,21,31,.06); --shadow-md: 0 8px 32px rgba(18,21,31,.10);
+      --radius: 10px; --radius-lg: 16px; --radius-pill: 100px;
+    }
+    html { font-size: 16px; }
+    body { font-family: 'Onest', sans-serif; background: var(--bg); color: var(--text); -webkit-font-smoothing: antialiased; display: flex; min-height: 100vh; }
+
+    .sidebar { width: 220px; background: var(--white); border-right: 1px solid var(--border); padding: 0; display: flex; flex-direction: column; position: fixed; top: 0; left: 0; bottom: 0; z-index: 10; }
+    .sidebar-logo { padding: 20px 20px 16px; border-bottom: 1px solid var(--border); }
+    .sidebar-logo a { font-family: 'Geologica', sans-serif; font-size: 15px; font-weight: 700; letter-spacing: -0.04em; color: var(--text); text-decoration: none; }
+    .sidebar-logo .i { color: var(--accent); }
+    .sidebar-role { font-size: 11px; color: var(--text-3); font-weight: 500; margin-top: 2px; }
+    .sidebar-nav { flex: 1; padding: 12px 8px; overflow-y: auto; }
+    .nav-group-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-3); padding: 10px 12px 4px; }
+    .nav-item { display: flex; align-items: center; gap: 9px; padding: 9px 12px; border-radius: var(--radius); font-size: 13px; font-weight: 500; color: var(--text-2); text-decoration: none; margin-bottom: 1px; }
+    .nav-item:hover { background: var(--bg); color: var(--text); }
+    .nav-item.active { background: var(--accent-light); color: var(--accent); font-weight: 600; }
+    .nav-icon { font-size: 15px; flex-shrink: 0; }
+    .nav-badge { margin-left: auto; background: var(--accent); color: var(--white); font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: var(--radius-pill); }
+    .sidebar-user { padding: 16px; border-top: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
+    .user-av { width: 32px; height: 32px; border-radius: 50%; background: var(--accent-light); color: var(--accent); font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .user-name { font-size: 13px; font-weight: 600; }
+    .user-role { font-size: 11px; color: var(--text-3); }
+
+    .main { margin-left: 220px; flex: 1; padding: 32px 36px; }
+    .page-title { font-family: 'Geologica', sans-serif; font-size: 24px; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 4px; }
+    .page-sub { font-size: 14px; color: var(--text-2); margin-bottom: 32px; }
+    .section-title { font-size: 16px; font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; }
+    .btn { font-family: 'Onest', sans-serif; font-size: 13px; font-weight: 600; padding: 8px 18px; border-radius: var(--radius-pill); border: none; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: background .15s; }
+    .btn-primary { background: var(--accent); color: var(--white); }
+    .btn-ghost { background: none; color: var(--text-2); border: 1px solid var(--border); }
+    .btn-ghost:hover { background: var(--white); }
+
+    .card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px 22px; }
+    .mb { margin-bottom: 24px; }
+
+    /* TABS */
+    .tabs { display: flex; gap: 4px; background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-pill); padding: 4px; width: fit-content; margin-bottom: 24px; }
+    .tab { padding: 7px 18px; border-radius: var(--radius-pill); font-size: 13px; font-weight: 500; cursor: pointer; color: var(--text-2); border: none; background: none; }
+    .tab.active { background: var(--accent); color: var(--white); font-weight: 600; }
+
+    /* TARGET CARD */
+    .target-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; margin-bottom: 24px; }
+    .target-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px; }
+    .target-card:hover { border-color: var(--accent-muted); }
+    .target-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+    .target-name { font-size: 15px; font-weight: 700; }
+    .target-stage { font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: var(--radius-pill); background: var(--bg); color: var(--text-2); border: 1px solid var(--border); }
+    .hypo-box { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 10px 12px; font-size: 13px; color: var(--text-2); line-height: 1.5; margin-bottom: 12px; font-style: italic; }
+    .tag { font-size: 11px; font-weight: 500; padding: 3px 9px; border-radius: var(--radius-pill); display: inline-block; }
+    .tag-blue { background: var(--accent-light); color: var(--accent); }
+    .tag-grey { background: var(--bg); color: var(--text-2); border: 1px solid var(--border); }
+    .tag-green { background: #dcfce7; color: #16a34a; }
+    .tag-orange { background: #fff7ed; color: #c2410c; border: 1px solid #fed7aa; }
+    .tags { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 14px; }
+    .target-footer { display: flex; justify-content: space-between; align-items: center; }
+    .matchmaker { font-size: 12px; color: var(--text-3); }
+
+    /* REQUEST */
+    .request-list { display: flex; flex-direction: column; gap: 12px; }
+    .request-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 18px 20px; display: flex; gap: 16px; align-items: flex-start; }
+    .request-icon { width: 40px; height: 40px; border-radius: var(--radius); background: var(--accent-light); display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+    .request-title { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+    .request-desc { font-size: 13px; color: var(--text-2); line-height: 1.5; margin-bottom: 10px; }
+    .request-match { font-size: 12px; font-weight: 700; color: var(--accent); }
+
+    /* MY STARTUPS */
+    .my-startup-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 18px 20px; margin-bottom: 12px; display: flex; gap: 16px; align-items: center; }
+    .startup-logo { width: 40px; height: 40px; border-radius: var(--radius); background: var(--bg); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; color: var(--text-3); flex-shrink: 0; }
+    .startup-name { font-size: 15px; font-weight: 700; margin-bottom: 2px; }
+    .startup-meta { font-size: 12px; color: var(--text-2); }
+    .next-call { font-size: 12px; color: var(--text-3); margin-left: auto; text-align: right; }
+    .call-date { font-size: 13px; font-weight: 600; color: var(--text); }
+  </style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <a href="index.html">brainbox<span class="i">_I</span></a>
+    <div class="sidebar-role">Кабинет ментора</div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-group-label">Мои стартапы</div>
+    <a href="mentors.html" class="nav-item active"><span class="nav-icon">⚡</span> Обзор</a>
+    <a href="monthly-update.html" class="nav-item"><span class="nav-icon">📝</span> Monthly updates</a>
+    <a href="#" class="nav-item"><span class="nav-icon">📅</span> Звонки</a>
+    <div class="nav-group-label">Фонд</div>
+    <a href="funnel.html" class="nav-item"><span class="nav-icon">🎯</span> Таргеты <span class="nav-badge">4</span></a>
+    <a href="#" class="nav-item"><span class="nav-icon">🤝</span> Запросы на менторство <span class="nav-badge">2</span></a>
+    <a href="portfolio.html" class="nav-item"><span class="nav-icon">💼</span> Портфель фонда</a>
+    <div class="nav-group-label">Профиль</div>
+    <a href="mentor-profile.html" class="nav-item"><span class="nav-icon">👤</span> Мой профиль</a>
+  </nav>
+  <div class="sidebar-user">
+    <div class="user-av">РШ</div>
+    <div>
+      <div class="user-name">Ринат Шамсиев</div>
+      <div class="user-role">Ментор · LP фонда</div>
+    </div>
+  </div>
+</aside>
+
+<main class="main">
+  <div class="page-title">Добро пожаловать, Ринат</div>
+  <div class="page-sub">Ментор и LP фонда · Специализация: B2B SaaS, Enterprise Sales, трекинг</div>
+
+  <div class="tabs">
+    <button class="tab active">Таргеты фонда</button>
+    <button class="tab">Запросы на менторство</button>
+    <button class="tab">Мои стартапы</button>
+  </div>
+
+  <!-- TARGETS -->
+  <div class="section-title">
+    Таргеты фонда
+    <span style="font-size:12px;color:var(--text-3);font-weight:400;">Доступно только менторам и сотрудникам фонда</span>
+  </div>
+  <div class="target-grid">
+
+    <div class="target-card">
+      <div class="target-top">
+        <div class="target-name">VOX</div>
+        <span class="target-stage">Seed</span>
+      </div>
+      <div class="hypo-box">"Нужен эксперт по Enterprise Sales для перехода B2C → B2B и корпоративного цикла продаж"</div>
+      <div class="tags">
+        <span class="tag tag-blue">Enterprise Sales</span>
+        <span class="tag tag-blue">B2B SaaS</span>
+        <span class="tag tag-orange">Поиск ментора</span>
+      </div>
+      <div class="target-footer">
+        <div class="matchmaker">Матч-мейкер: Сергей Мазур</div>
+        <a href="ai-match.html" class="btn btn-primary" style="font-size:12px;padding:6px 14px;">Посмотреть матч</a>
+      </div>
+    </div>
+
+    <div class="target-card">
+      <div class="target-top">
+        <div class="target-name">Hiremate</div>
+        <span class="target-stage">Pre-seed</span>
+      </div>
+      <div class="hypo-box">"Нужен эксперт по Product Marketing для B2B HR-рынка и построения inbound-воронки"</div>
+      <div class="tags">
+        <span class="tag tag-blue">Product Marketing</span>
+        <span class="tag tag-blue">HRTech</span>
+        <span class="tag tag-orange">Поиск ментора</span>
+      </div>
+      <div class="target-footer">
+        <div class="matchmaker">Матч-мейкер: Родион Брехач</div>
+        <a href="#" class="btn btn-ghost" style="font-size:12px;padding:6px 14px;">Откликнуться</a>
+      </div>
+    </div>
+
+    <div class="target-card">
+      <div class="target-top">
+        <div class="target-name">Долгожитель</div>
+        <span class="target-stage">Seed</span>
+      </div>
+      <div class="hypo-box">"Нужен эксперт по выходу на B2G рынок и взаимодействию с государственными структурами в сфере здравоохранения"</div>
+      <div class="tags">
+        <span class="tag tag-blue">B2G</span>
+        <span class="tag tag-blue">HealthTech</span>
+        <span class="tag tag-green">Ментор найден</span>
+      </div>
+      <div class="target-footer">
+        <div class="matchmaker">Матч-мейкер: Даурен Токтамысов</div>
+        <a href="startup-card.html" class="btn btn-ghost" style="font-size:12px;padding:6px 14px;">Подробнее</a>
+      </div>
+    </div>
+
+    <div class="target-card">
+      <div class="target-top">
+        <div class="target-name">Indee</div>
+        <span class="target-stage">Pre-seed</span>
+      </div>
+      <div class="hypo-box">"Нужен эксперт по медийному продвижению и построению community в creative-индустрии"</div>
+      <div class="tags">
+        <span class="tag tag-blue">Media</span>
+        <span class="tag tag-blue">Community</span>
+        <span class="tag tag-orange">Поиск ментора</span>
+      </div>
+      <div class="target-footer">
+        <div class="matchmaker">Матч-мейкер: Родион Брехач</div>
+        <a href="#" class="btn btn-ghost" style="font-size:12px;padding:6px 14px;">Откликнуться</a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- REQUESTS -->
+  <div class="section-title" style="margin-top:8px;">Запросы на менторство</div>
+  <div class="request-list">
+    <div class="request-card">
+      <div class="request-icon">💼</div>
+      <div style="flex:1;">
+        <div class="request-title">Требуется эксперт по Enterprise Sales</div>
+        <div class="request-desc">VOX · Голосовой AI-ассистент · Seed · MRR 420K ₽ · 18 клиентов<br>Нужна помощь в выстраивании цикла корпоративной продажи от 3 до 6 месяцев и формировании команды продаж.</div>
+        <div class="tags"><span class="tag tag-blue">Enterprise Sales</span><span class="tag tag-blue">B2B SaaS</span><span class="tag tag-blue">Корпоративные продажи</span></div>
+        <div class="request-match">Совпадение с вашим профилем: 92%</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px;flex-shrink:0;">
+        <a href="ai-match.html" class="btn btn-primary">Откликнуться</a>
+        <a href="startup-card.html" class="btn btn-ghost">Подробнее</a>
+      </div>
+    </div>
+
+    <div class="request-card">
+      <div class="request-icon">📈</div>
+      <div style="flex:1;">
+        <div class="request-title">Требуется эксперт по трекингу метрик роста</div>
+        <div class="request-desc">Hiremate · AI-рекрутинговая платформа · Pre-seed · 5 клиентов<br>Нужно выстроить систему трекинга продуктовых метрик и unit-экономику под раунд Series A.</div>
+        <div class="tags"><span class="tag tag-blue">Трекинг</span><span class="tag tag-blue">Unit economics</span><span class="tag tag-blue">HRTech</span></div>
+        <div class="request-match">Совпадение с вашим профилем: 78%</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px;flex-shrink:0;">
+        <a href="#" class="btn btn-primary">Откликнуться</a>
+        <a href="startup-card.html" class="btn btn-ghost">Подробнее</a>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+</body>
+</html>

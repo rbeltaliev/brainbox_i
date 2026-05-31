@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI-подбор ментора — brainbox_I</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=Geologica:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #f4f2ee; --white: #ffffff; --text: #12151f; --text-2: #444c5e; --text-3: #8891a6;
+      --accent: #1847e3; --accent-hover: #1238c0; --accent-light: #eef1fd; --accent-muted: #c7d0f9;
+      --border: #e0dcd4; --shadow: 0 1px 3px rgba(18,21,31,.06); --shadow-md: 0 8px 32px rgba(18,21,31,.10);
+      --radius: 10px; --radius-lg: 16px; --radius-pill: 100px;
+    }
+    html { font-size: 16px; }
+    body { font-family: 'Onest', sans-serif; background: var(--bg); color: var(--text); -webkit-font-smoothing: antialiased; }
+
+    .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; height: 60px; background: rgba(244,242,238,.88); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 32px; gap: 12px; }
+    .nav-logo { font-family: 'Geologica', sans-serif; font-size: 15px; font-weight: 700; letter-spacing: -0.04em; color: var(--text); text-decoration: none; }
+    .nav-logo .i { color: var(--accent); }
+    .nav-spacer { flex: 1; }
+    .nav-breadcrumb { font-size: 13px; color: var(--text-3); display: flex; align-items: center; gap: 6px; }
+    .nav-breadcrumb a { color: var(--text-2); text-decoration: none; }
+    .nav-breadcrumb a:hover { color: var(--accent); }
+    .btn { font-family: 'Onest', sans-serif; font-size: 13px; font-weight: 600; padding: 8px 18px; border-radius: var(--radius-pill); border: none; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: background .15s; }
+    .btn-primary { background: var(--accent); color: var(--white); }
+    .btn-primary:hover { background: var(--accent-hover); }
+    .btn-ghost { background: none; color: var(--text-2); border: 1px solid var(--border); }
+    .btn-ghost:hover { background: var(--white); }
+
+    .page { max-width: 1100px; margin: 0 auto; padding: 80px 32px 64px; display: grid; grid-template-columns: 340px 1fr; gap: 28px; }
+
+    /* LEFT — hypothesis */
+    .left { }
+    .hypo-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 24px; margin-bottom: 16px; position: sticky; top: 80px; }
+    .card-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-3); margin-bottom: 12px; }
+    .startup-row { display: flex; gap: 12px; align-items: center; margin-bottom: 18px; }
+    .startup-logo { width: 44px; height: 44px; border-radius: 10px; background: var(--bg); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; color: var(--text-3); flex-shrink: 0; }
+    .startup-name { font-size: 16px; font-weight: 700; }
+    .startup-sub { font-size: 12px; color: var(--text-2); }
+    .hypo-box { background: var(--accent-light); border: 1px solid var(--accent-muted); border-radius: var(--radius); padding: 14px; font-size: 14px; font-style: italic; color: var(--text); line-height: 1.6; margin-bottom: 14px; }
+    .tags { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 16px; }
+    .tag { font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: var(--radius-pill); display: inline-block; }
+    .tag-blue { background: var(--accent-light); color: var(--accent); }
+    .tag-grey { background: var(--bg); color: var(--text-2); border: 1px solid var(--border); }
+    .tag-green { background: #dcfce7; color: #16a34a; }
+    .ai-note { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 14px; font-size: 12px; color: var(--text-2); line-height: 1.5; display: flex; gap: 8px; }
+    .ai-icon { font-size: 16px; flex-shrink: 0; }
+
+    /* RIGHT — candidates */
+    .right {}
+    .right-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+    .right-title { font-family: 'Geologica', sans-serif; font-size: 20px; font-weight: 800; letter-spacing: -0.02em; }
+    .right-sub { font-size: 13px; color: var(--text-2); margin-top: 2px; }
+
+    /* MATCH CARD */
+    .match-list { display: flex; flex-direction: column; gap: 14px; }
+    .match-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 22px 24px; }
+    .match-card.top { border-color: var(--accent-muted); box-shadow: 0 0 0 3px rgba(24,71,227,.06); }
+    .match-top { display: flex; gap: 16px; align-items: flex-start; margin-bottom: 16px; }
+    .mentor-av { width: 48px; height: 48px; border-radius: 50%; background: var(--accent-light); border: 2px solid var(--accent-muted); display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800; color: var(--accent); flex-shrink: 0; }
+    .mentor-info { flex: 1; }
+    .mentor-name { font-size: 16px; font-weight: 700; margin-bottom: 2px; }
+    .mentor-role { font-size: 13px; color: var(--text-2); line-height: 1.4; }
+    .match-pct-wrap { text-align: right; flex-shrink: 0; }
+    .match-pct { font-family: 'Geologica', sans-serif; font-size: 28px; font-weight: 900; color: var(--accent); letter-spacing: -0.03em; line-height: 1; }
+    .match-pct-label { font-size: 10px; color: var(--text-3); font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; }
+    .pct-bar-wrap { height: 4px; background: var(--bg); border-radius: 4px; margin-bottom: 16px; overflow: hidden; }
+    .pct-bar { height: 100%; background: var(--accent); border-radius: 4px; }
+    .reasons { display: flex; flex-direction: column; gap: 7px; margin-bottom: 16px; }
+    .reason { display: flex; gap: 8px; align-items: flex-start; font-size: 13px; color: var(--text-2); line-height: 1.4; }
+    .reason-icon { color: #16a34a; font-weight: 700; font-size: 12px; flex-shrink: 0; margin-top: 2px; }
+    .match-model { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: var(--radius-pill); background: var(--bg); color: var(--text-2); border: 1px solid var(--border); display: inline-block; margin-bottom: 16px; }
+    .match-actions { display: flex; gap: 8px; padding-top: 16px; border-top: 1px solid var(--border); }
+    .match-badge { position: relative; }
+    .top-badge { position: absolute; top: -8px; right: -8px; background: var(--accent); color: var(--white); font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: var(--radius-pill); }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html" class="nav-logo">brainbox<span class="i">_I</span></a>
+  <div class="nav-breadcrumb">
+    <span>/</span>
+    <a href="startup-card.html">VOX</a>
+    <span>/</span>
+    <span>AI-подбор ментора</span>
+  </div>
+  <div class="nav-spacer"></div>
+  <a href="startup-card.html" class="btn btn-ghost">← Карточка стартапа</a>
+</nav>
+
+<div class="page">
+
+  <!-- LEFT -->
+  <div class="left">
+    <div class="hypo-card">
+      <div class="card-label">Анализ</div>
+      <div class="startup-row">
+        <div class="startup-logo">VOX</div>
+        <div>
+          <div class="startup-name">VOX</div>
+          <div class="startup-sub">AI / ML · Seed · MRR 420K ₽</div>
+        </div>
+      </div>
+      <div class="card-label">Гипотеза роста</div>
+      <div class="hypo-box">
+        "Для масштабирования VOX нужен эксперт по Enterprise Sales с опытом перехода B2C → B2B и корпоративного цикла продаж 3–6 месяцев"
+      </div>
+      <div class="tags">
+        <span class="tag tag-blue">Enterprise Sales</span>
+        <span class="tag tag-blue">B2B SaaS</span>
+        <span class="tag tag-blue">Корпоративные клиенты</span>
+        <span class="tag tag-blue">Цикл продаж 3–6 мес</span>
+      </div>
+      <div class="ai-note">
+        <span class="ai-icon">🤖</span>
+        <span>AI проанализировал профили 100 менторов и нашёл 4 кандидата с совпадением выше 70%. Рекомендован Ринат Шамсиев — 92% совпадение.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT -->
+  <div class="right">
+    <div class="right-header">
+      <div>
+        <div class="right-title">Кандидаты</div>
+        <div class="right-sub">Найдено 4 ментора с совпадением выше 70%</div>
+      </div>
+    </div>
+
+    <div class="match-list">
+
+      <!-- #1 -->
+      <div class="match-card top" style="position:relative;">
+        <div style="position:absolute;top:16px;right:16px;background:var(--accent);color:var(--white);font-size:10px;font-weight:700;padding:3px 10px;border-radius:var(--radius-pill);">Рекомендован</div>
+        <div class="match-top">
+          <div class="mentor-av">РШ</div>
+          <div class="mentor-info">
+            <div class="mentor-name">Ринат Шамсиев</div>
+            <div class="mentor-role">Ведущий трекер ФРИИ · CEO Zvonobot (капитализация 500+ млн ₽)</div>
+          </div>
+          <div class="match-pct-wrap">
+            <div class="match-pct">92%</div>
+            <div class="match-pct-label">совпадение</div>
+          </div>
+        </div>
+        <div class="pct-bar-wrap"><div class="pct-bar" style="width:92%;"></div></div>
+        <div class="reasons">
+          <div class="reason"><span class="reason-icon">✓</span>Zvonobot — прямой аналог: B2B SaaS с переходом от SMB к Enterprise-клиентам</div>
+          <div class="reason"><span class="reason-icon">✓</span>Трекер ФРИИ со специализацией на построении Enterprise Sales</div>
+          <div class="reason"><span class="reason-icon">✓</span>Опыт трекинга 500+ компаний, из которых 80+ перешли в корпоративный сегмент</div>
+          <div class="reason"><span class="reason-icon">✓</span>Понимает AI/ML-продукты и умеет доносить ценность до нетехнической аудитории</div>
+        </div>
+        <span class="match-model">Время в обмен на долю</span>
+        <div class="tags" style="margin-bottom:0;">
+          <span class="tag tag-blue">Enterprise Sales</span>
+          <span class="tag tag-blue">B2B SaaS</span>
+          <span class="tag tag-blue">ФРИИ</span>
+          <span class="tag tag-blue">500+ компаний</span>
+        </div>
+        <div class="match-actions">
+          <a href="mentor-profile.html" class="btn btn-primary" style="flex:1;justify-content:center;">Связаться с ментором</a>
+          <a href="mentor-profile.html" class="btn btn-ghost">Профиль</a>
+        </div>
+      </div>
+
+      <!-- #2 -->
+      <div class="match-card">
+        <div class="match-top">
+          <div class="mentor-av">МВ</div>
+          <div class="mentor-info">
+            <div class="mentor-name">Михаил Волков</div>
+            <div class="mentor-role">Экс-CEO Сбербанк Страхование · Опыт корпоративных продаж B2B/B2G</div>
+          </div>
+          <div class="match-pct-wrap">
+            <div class="match-pct" style="color:var(--text);">78%</div>
+            <div class="match-pct-label">совпадение</div>
+          </div>
+        </div>
+        <div class="pct-bar-wrap"><div class="pct-bar" style="width:78%;background:var(--text-3);"></div></div>
+        <div class="reasons">
+          <div class="reason"><span class="reason-icon">✓</span>20+ лет в корпоративных продажах Enterprise B2B в крупных организациях</div>
+          <div class="reason"><span class="reason-icon">✓</span>Опыт построения отделов продаж с циклом сделки 6–12 месяцев</div>
+          <div class="reason" style="color:var(--text-3);"><span style="color:var(--text-3);">—</span> Менее знаком со спецификой AI/SaaS продуктов</div>
+        </div>
+        <span class="match-model">Время в обмен на долю</span>
+        <div class="match-actions">
+          <a href="mentor-profile.html" class="btn btn-ghost" style="flex:1;justify-content:center;">Связаться с ментором</a>
+          <a href="mentor-profile.html" class="btn btn-ghost">Профиль</a>
+        </div>
+      </div>
+
+      <!-- #3 -->
+      <div class="match-card">
+        <div class="match-top">
+          <div class="mentor-av">ЛБ</div>
+          <div class="mentor-info">
+            <div class="mentor-name">Людмила Булавкина</div>
+            <div class="mentor-role">Экс-CMO Одноклассники, YouDo · Бизнес-ангел</div>
+          </div>
+          <div class="match-pct-wrap">
+            <div class="match-pct" style="color:var(--text);">71%</div>
+            <div class="match-pct-label">совпадение</div>
+          </div>
+        </div>
+        <div class="pct-bar-wrap"><div class="pct-bar" style="width:71%;background:var(--text-3);"></div></div>
+        <div class="reasons">
+          <div class="reason"><span class="reason-icon">✓</span>Опыт перехода продуктов из B2C в B2B (YouDo)</div>
+          <div class="reason"><span class="reason-icon">✓</span>Сильная экспертиза в growth marketing и Product-led growth</div>
+          <div class="reason" style="color:var(--text-3);"><span style="color:var(--text-3);">—</span> Фокус больше на маркетинге, чем на Enterprise Sales</div>
+        </div>
+        <span class="match-model">Время в обмен на долю</span>
+        <div class="match-actions">
+          <a href="mentor-profile.html" class="btn btn-ghost" style="flex:1;justify-content:center;">Связаться с ментором</a>
+          <a href="mentor-profile.html" class="btn btn-ghost">Профиль</a>
+        </div>
+      </div>
+
+      <!-- #4 -->
+      <div class="match-card">
+        <div class="match-top">
+          <div class="mentor-av">СМ</div>
+          <div class="mentor-info">
+            <div class="mentor-name">Сергей Мазур</div>
+            <div class="mentor-role">Профессиональный трекер Сколково · 15 лет · 500+ компаний</div>
+          </div>
+          <div class="match-pct-wrap">
+            <div class="match-pct" style="color:var(--text);">68%</div>
+            <div class="match-pct-label">совпадение</div>
+          </div>
+        </div>
+        <div class="pct-bar-wrap"><div class="pct-bar" style="width:68%;background:var(--text-3);"></div></div>
+        <div class="reasons">
+          <div class="reason"><span class="reason-icon">✓</span>Является матч-мейкером VOX — знает проект глубоко</div>
+          <div class="reason"><span class="reason-icon">✓</span>Опыт трекинга B2B SaaS компаний в Сколково</div>
+          <div class="reason" style="color:var(--text-3);"><span style="color:var(--text-3);">—</span> Конфликт интересов как матч-мейкера и ментора</div>
+        </div>
+        <span class="match-model">Время в обмен на долю</span>
+        <div class="match-actions">
+          <a href="mentor-profile.html" class="btn btn-ghost" style="flex:1;justify-content:center;">Связаться с ментором</a>
+          <a href="mentor-profile.html" class="btn btn-ghost">Профиль</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Кабинет матч-мейкера — brainbox_I</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=Geologica:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #f4f2ee; --white: #ffffff; --text: #12151f; --text-2: #444c5e; --text-3: #8891a6;
+      --accent: #1847e3; --accent-hover: #1238c0; --accent-light: #eef1fd; --accent-muted: #c7d0f9;
+      --border: #e0dcd4; --shadow: 0 1px 3px rgba(18,21,31,.06); --shadow-md: 0 8px 32px rgba(18,21,31,.10);
+      --radius: 10px; --radius-lg: 16px; --radius-pill: 100px;
+    }
+    html { font-size: 16px; }
+    body { font-family: 'Onest', sans-serif; background: var(--bg); color: var(--text); -webkit-font-smoothing: antialiased; display: flex; min-height: 100vh; }
+
+    .sidebar { width: 220px; background: var(--white); border-right: 1px solid var(--border); display: flex; flex-direction: column; position: fixed; top: 0; left: 0; bottom: 0; z-index: 10; }
+    .sidebar-logo { padding: 20px 20px 16px; border-bottom: 1px solid var(--border); }
+    .sidebar-logo a { font-family: 'Geologica', sans-serif; font-size: 15px; font-weight: 700; letter-spacing: -0.04em; color: var(--text); text-decoration: none; }
+    .sidebar-logo .i { color: var(--accent); }
+    .sidebar-role { font-size: 11px; color: var(--text-3); font-weight: 500; margin-top: 2px; }
+    .sidebar-nav { flex: 1; padding: 12px 8px; }
+    .nav-group-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-3); padding: 10px 12px 4px; }
+    .nav-item { display: flex; align-items: center; gap: 9px; padding: 9px 12px; border-radius: var(--radius); font-size: 13px; font-weight: 500; color: var(--text-2); text-decoration: none; margin-bottom: 1px; }
+    .nav-item:hover { background: var(--bg); }
+    .nav-item.active { background: var(--accent-light); color: var(--accent); font-weight: 600; }
+    .nav-badge { margin-left: auto; background: var(--accent); color: var(--white); font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: var(--radius-pill); }
+    .sidebar-user { padding: 16px; border-top: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
+    .user-av { width: 32px; height: 32px; border-radius: 50%; background: var(--accent-light); color: var(--accent); font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+    .user-name { font-size: 13px; font-weight: 600; }
+    .user-role { font-size: 11px; color: var(--text-3); }
+
+    .main { margin-left: 220px; flex: 1; padding: 32px 36px; }
+    .page-title { font-family: 'Geologica', sans-serif; font-size: 24px; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 4px; }
+    .page-sub { font-size: 14px; color: var(--text-2); margin-bottom: 32px; }
+    .section-title { font-size: 15px; font-weight: 700; margin-bottom: 14px; display: flex; align-items: center; justify-content: space-between; }
+    .btn { font-family: 'Onest', sans-serif; font-size: 13px; font-weight: 600; padding: 8px 18px; border-radius: var(--radius-pill); border: none; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: background .15s; }
+    .btn-primary { background: var(--accent); color: var(--white); }
+    .btn-primary:hover { background: var(--accent-hover); }
+    .btn-ghost { background: none; color: var(--text-2); border: 1px solid var(--border); }
+    .btn-ghost:hover { background: var(--white); }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
+    .card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px 22px; }
+    .tag { font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: var(--radius-pill); display: inline-block; }
+    .tag-orange { background: #fff7ed; color: #c2410c; border: 1px solid #fed7aa; }
+    .tag-blue { background: var(--accent-light); color: var(--accent); }
+    .tag-green { background: #dcfce7; color: #16a34a; }
+    .tag-grey { background: var(--bg); color: var(--text-2); border: 1px solid var(--border); }
+
+    /* QUEUE */
+    .queue-list { display: flex; flex-direction: column; gap: 10px; }
+    .queue-item { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 16px 18px; display: flex; gap: 14px; align-items: flex-start; }
+    .queue-item.urgent { border-left: 3px solid #f59e0b; }
+    .q-num { width: 28px; height: 28px; border-radius: 50%; background: var(--bg); color: var(--text-3); font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .q-name { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
+    .q-sub { font-size: 12px; color: var(--text-2); margin-bottom: 8px; }
+    .q-actions { display: flex; gap: 6px; }
+
+    /* HYPO FORM */
+    .hypo-form { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 22px; margin-bottom: 20px; }
+    .hypo-startup { display: flex; gap: 12px; align-items: center; margin-bottom: 18px; padding-bottom: 18px; border-bottom: 1px solid var(--border); }
+    .startup-logo { width: 40px; height: 40px; border-radius: var(--radius); background: var(--bg); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 800; color: var(--text-3); flex-shrink: 0; }
+    .startup-name { font-size: 15px; font-weight: 700; }
+    .startup-sub { font-size: 12px; color: var(--text-2); }
+    label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+    textarea { width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 14px; font-family: 'Onest', sans-serif; font-size: 14px; color: var(--text); outline: none; resize: vertical; min-height: 90px; transition: border-color .15s; }
+    textarea:focus { border-color: var(--accent); background: var(--white); }
+    .form-hint { font-size: 12px; color: var(--text-3); margin-top: 5px; margin-bottom: 14px; }
+    .tags-field { display: flex; flex-wrap: wrap; gap: 6px; padding: 10px; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); min-height: 44px; margin-bottom: 14px; }
+    .tags-field .tag { cursor: pointer; }
+    .add-tag { font-size: 12px; color: var(--text-3); cursor: pointer; padding: 3px 9px; border-radius: var(--radius-pill); border: 1px dashed var(--border); }
+    .form-actions { display: flex; justify-content: flex-end; gap: 8px; padding-top: 14px; border-top: 1px solid var(--border); }
+
+    /* MY QUEUE STATS */
+    .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 24px; }
+    .stat-mini { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 16px; text-align: center; }
+    .stat-num { font-family: 'Geologica', sans-serif; font-size: 28px; font-weight: 900; letter-spacing: -0.03em; }
+    .stat-num em { color: var(--accent); font-style: normal; }
+    .stat-label { font-size: 12px; color: var(--text-2); margin-top: 4px; line-height: 1.3; }
+  </style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <a href="index.html">brainbox<span class="i">_I</span></a>
+    <div class="sidebar-role">Кабинет матч-мейкера</div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-group-label">Моя очередь</div>
+    <a href="matchmaker.html" class="nav-item active">⚡ Обзор <span class="nav-badge">3</span></a>
+    <a href="funnel.html" class="nav-item">🔄 Воронка фонда</a>
+    <div class="nav-group-label">Инструменты</div>
+    <a href="startup-card.html" class="nav-item">📋 Карточки стартапов</a>
+    <a href="ai-match.html" class="nav-item">🤖 AI-подбор</a>
+    <div class="nav-group-label">Портфель</div>
+    <a href="portfolio.html" class="nav-item">💼 Портфель</a>
+    <a href="mentors.html" class="nav-item">👥 Менторы</a>
+  </nav>
+  <div class="sidebar-user">
+    <div class="user-av">СМ</div>
+    <div>
+      <div class="user-name">Сергей Мазур</div>
+      <div class="user-role">Матч-мейкер</div>
+    </div>
+  </div>
+</aside>
+
+<main class="main">
+  <div class="page-title">Моя очередь</div>
+  <div class="page-sub">Матч-мейкер · 3 активных стартапа в работе</div>
+
+  <!-- STATS -->
+  <div class="stats-row">
+    <div class="stat-mini">
+      <div class="stat-num">3</div>
+      <div class="stat-label">В работе сейчас</div>
+    </div>
+    <div class="stat-mini">
+      <div class="stat-num">12</div>
+      <div class="stat-label">Welcome-calls проведено</div>
+    </div>
+    <div class="stat-mini">
+      <div class="stat-num">8</div>
+      <div class="stat-label">Гипотез сформировано</div>
+    </div>
+    <div class="stat-mini">
+      <div class="stat-num">5<em>↑</em></div>
+      <div class="stat-label">Таргетов в портфеле</div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <!-- QUEUE -->
+    <div>
+      <div class="section-title">В работе</div>
+      <div class="queue-list">
+
+        <div class="queue-item urgent">
+          <div class="q-num">1</div>
+          <div style="flex:1;">
+            <div class="q-name">ClickMetrics</div>
+            <div class="q-sub">Аналитика e-commerce · Welcome-call 5 июня 14:00</div>
+            <div style="display:flex;gap:5px;margin-bottom:8px;flex-wrap:wrap;"><span class="tag tag-orange">Welcome-call завтра</span></div>
+            <div class="q-actions">
+              <a href="#" class="btn btn-primary" style="font-size:12px;padding:6px 12px;">Подготовиться к звонку</a>
+              <a href="startup-card.html" class="btn btn-ghost" style="font-size:12px;padding:6px 12px;">Карточка</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="queue-item">
+          <div class="q-num">2</div>
+          <div style="flex:1;">
+            <div class="q-name">VOX</div>
+            <div class="q-sub">Голосовой AI · Seed · Гипотеза сформулирована</div>
+            <div style="display:flex;gap:5px;margin-bottom:8px;flex-wrap:wrap;"><span class="tag tag-blue">Поиск ментора</span></div>
+            <div class="q-actions">
+              <a href="ai-match.html" class="btn btn-primary" style="font-size:12px;padding:6px 12px;">AI-подбор ментора</a>
+              <a href="startup-card.html" class="btn btn-ghost" style="font-size:12px;padding:6px 12px;">Карточка</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="queue-item">
+          <div class="q-num">3</div>
+          <div style="flex:1;">
+            <div class="q-name">EduPath</div>
+            <div class="q-sub">EdTech · Pre-seed · Назначен звонок 10 июня</div>
+            <div style="display:flex;gap:5px;margin-bottom:8px;flex-wrap:wrap;"><span class="tag tag-grey">Welcome-call назначен</span></div>
+            <div class="q-actions">
+              <a href="#" class="btn btn-ghost" style="font-size:12px;padding:6px 12px;">Изучить заявку</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- HYPO FORM -->
+    <div>
+      <div class="section-title">Сформировать гипотезу роста</div>
+      <div class="hypo-form">
+        <div class="hypo-startup">
+          <div class="startup-logo">VOX</div>
+          <div>
+            <div class="startup-name">VOX</div>
+            <div class="startup-sub">Голосовой AI · Seed · MRR 420K</div>
+          </div>
+        </div>
+
+        <div>
+          <label>Гипотеза роста <span style="color:var(--accent);">*</span></label>
+          <textarea placeholder="Для роста стартапу необходим эксперт по...">Для масштабирования VOX нужен эксперт по Enterprise Sales с опытом перехода B2C → B2B и выстраивания корпоративного цикла продаж 3–6 месяцев</textarea>
+          <div class="form-hint">Сформулируйте одним предложением — это центральный объект системы</div>
+        </div>
+
+        <div>
+          <label>Ключевые теги</label>
+          <div class="tags-field">
+            <span class="tag tag-blue">Enterprise Sales</span>
+            <span class="tag tag-blue">B2B SaaS</span>
+            <span class="tag tag-blue">Корпоративные клиенты</span>
+            <span class="add-tag">+ добавить тег</span>
+          </div>
+        </div>
+
+        <div>
+          <label>Внутренние заметки (только для фонда)</label>
+          <textarea style="min-height:60px;" placeholder="Что ещё стоит учесть при подборе ментора...">Основатель технически сильный, но не имеет опыта корпоративных продаж. Нужен ментор, который прошёл этот путь лично.</textarea>
+        </div>
+
+        <div class="form-actions">
+          <a href="#" class="btn btn-ghost">Сохранить черновик</a>
+          <a href="ai-match.html" class="btn btn-primary">Запустить AI-подбор →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+</body>
+</html>

@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Подать заявку — brainbox_I</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=Geologica:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #f4f2ee; --white: #ffffff; --text: #12151f; --text-2: #444c5e; --text-3: #8891a6;
+      --accent: #1847e3; --accent-hover: #1238c0; --accent-light: #eef1fd; --accent-muted: #c7d0f9;
+      --border: #e0dcd4; --shadow: 0 1px 3px rgba(18,21,31,.06); --shadow-md: 0 8px 32px rgba(18,21,31,.10);
+      --radius: 10px; --radius-lg: 16px; --radius-pill: 100px;
+    }
+    html { font-size: 16px; }
+    body { font-family: 'Onest', sans-serif; background: var(--bg); color: var(--text); -webkit-font-smoothing: antialiased; }
+
+    .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; height: 60px; background: rgba(244,242,238,.88); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 32px; gap: 12px; }
+    .nav-logo { font-family: 'Geologica', sans-serif; font-size: 15px; font-weight: 700; letter-spacing: -0.04em; color: var(--text); text-decoration: none; }
+    .nav-logo .i { color: var(--accent); }
+    .nav-spacer { flex: 1; }
+    .btn { font-family: 'Onest', sans-serif; font-size: 14px; font-weight: 600; padding: 9px 20px; border-radius: var(--radius-pill); border: none; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: background .15s; }
+    .btn-ghost { background: none; color: var(--text-2); border: 1px solid var(--border); }
+    .btn-ghost:hover { background: var(--white); }
+    .btn-primary { background: var(--accent); color: var(--white); }
+    .btn-primary:hover { background: var(--accent-hover); }
+
+    .page { display: grid; grid-template-columns: 340px 1fr; min-height: 100vh; padding-top: 60px; }
+
+    /* LEFT — info panel */
+    .left-panel { background: var(--white); border-right: 1px solid var(--border); padding: 48px 36px; position: sticky; top: 60px; height: calc(100vh - 60px); overflow-y: auto; }
+    .left-badge { display: inline-flex; align-items: center; gap: 6px; background: var(--accent-light); border-radius: var(--radius-pill); padding: 4px 12px; font-size: 11px; font-weight: 600; color: var(--accent); margin-bottom: 28px; }
+    h1 { font-family: 'Geologica', sans-serif; font-size: 26px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.2; margin-bottom: 12px; }
+    .left-desc { font-size: 14px; color: var(--text-2); line-height: 1.6; margin-bottom: 32px; }
+    .steps-mini { display: flex; flex-direction: column; gap: 0; }
+    .step-mini { display: flex; gap: 12px; padding-bottom: 20px; }
+    .step-mini:last-child { padding-bottom: 0; }
+    .step-mini-line { display: flex; flex-direction: column; align-items: center; }
+    .step-mini-dot { width: 24px; height: 24px; border-radius: 50%; background: var(--accent-light); color: var(--accent); font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .step-mini-connector { width: 1px; flex: 1; background: var(--border); margin: 3px 0; min-height: 16px; }
+    .step-mini-title { font-size: 13px; font-weight: 600; margin-bottom: 2px; padding-top: 3px; }
+    .step-mini-desc { font-size: 12px; color: var(--text-2); line-height: 1.4; }
+    .left-note { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; font-size: 12px; color: var(--text-2); line-height: 1.5; margin-top: 28px; }
+
+    /* RIGHT — form */
+    .right-panel { padding: 48px 56px; max-width: 720px; }
+    .form-section { margin-bottom: 48px; }
+    .form-section-title { font-family: 'Geologica', sans-serif; font-size: 18px; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 4px; }
+    .form-section-desc { font-size: 13px; color: var(--text-2); margin-bottom: 24px; }
+    .form-divider { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
+    .field { margin-bottom: 20px; }
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    label { display: block; font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+    label .req { color: var(--accent); }
+    input[type="text"], input[type="email"], input[type="url"], input[type="number"], select, textarea {
+      width: 100%; background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 11px 14px;
+      font-family: 'Onest', sans-serif; font-size: 14px; color: var(--text); outline: none;
+      transition: border-color .15s;
+    }
+    input:focus, select:focus, textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(24,71,227,.08); }
+    textarea { min-height: 100px; resize: vertical; }
+    select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M4 6l4 4 4-4' stroke='%238891a6' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 36px; }
+    .field-hint { font-size: 12px; color: var(--text-3); margin-top: 5px; }
+    .team-member { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 16px; margin-bottom: 12px; }
+    .add-btn { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; color: var(--accent); cursor: pointer; padding: 8px 0; background: none; border: none; }
+    .form-actions { display: flex; justify-content: space-between; align-items: center; padding-top: 8px; }
+    .btn-lg { padding: 14px 32px; font-size: 15px; }
+
+    @media (max-width: 900px) {
+      .page { grid-template-columns: 1fr; }
+      .left-panel { position: static; height: auto; border-right: none; border-bottom: 1px solid var(--border); }
+      .right-panel { padding: 32px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html" class="nav-logo">brainbox<span class="i">_I</span></a>
+  <div class="nav-spacer"></div>
+  <a href="index.html" class="btn btn-ghost" style="font-size:13px;padding:7px 16px;">← Назад</a>
+</nav>
+
+<div class="page">
+
+  <!-- LEFT -->
+  <aside class="left-panel">
+    <div class="left-badge">Стартапам</div>
+    <h1>Подача заявки в фонд</h1>
+    <p class="left-desc">После заполнения формы матч-мейкер свяжется с вами в течение 5 рабочих дней и назначит welcome-call.</p>
+    <div class="steps-mini">
+      <div class="step-mini">
+        <div class="step-mini-line"><div class="step-mini-dot">1</div><div class="step-mini-connector"></div></div>
+        <div><div class="step-mini-title">Заявка</div><div class="step-mini-desc">Заполняете карточку стартапа</div></div>
+      </div>
+      <div class="step-mini">
+        <div class="step-mini-line"><div class="step-mini-dot">2</div><div class="step-mini-connector"></div></div>
+        <div><div class="step-mini-title">Welcome-call</div><div class="step-mini-desc">30-минутный звонок с матч-мейкером</div></div>
+      </div>
+      <div class="step-mini">
+        <div class="step-mini-line"><div class="step-mini-dot">3</div><div class="step-mini-connector"></div></div>
+        <div><div class="step-mini-title">Гипотеза роста</div><div class="step-mini-desc">Определяем главный барьер масштабирования</div></div>
+      </div>
+      <div class="step-mini">
+        <div class="step-mini-line"><div class="step-mini-dot">4</div></div>
+        <div><div class="step-mini-title">Ментор и сделка</div><div class="step-mini-desc">AI находит профильного эксперта, фонд входит в капитал</div></div>
+      </div>
+    </div>
+    <div class="left-note">
+      Фонд инвестирует <strong>только</strong> если для стартапа найден подходящий ментор из сообщества. Это не недостаток — это гарантия качества.
+    </div>
+  </aside>
+
+  <!-- RIGHT -->
+  <main class="right-panel">
+
+    <div class="form-section">
+      <div class="form-section-title">О стартапе</div>
+      <div class="form-section-desc">Расскажите о продукте и рынке</div>
+      <div class="field-row">
+        <div class="field">
+          <label>Название <span class="req">*</span></label>
+          <input type="text" placeholder="VOX" value="VOX">
+        </div>
+        <div class="field">
+          <label>Сайт</label>
+          <input type="url" placeholder="https://vox.ai" value="https://vox.ai">
+        </div>
+      </div>
+      <div class="field">
+        <label>Описание продукта <span class="req">*</span></label>
+        <textarea placeholder="Что вы делаете, для кого, в чём уникальность...">Голосовой AI-ассистент для корпоративных клиентов. Автоматизирует входящие звонки, интегрируется с CRM, обучается на базе знаний компании.</textarea>
+        <div class="field-hint">2–4 предложения, без воды</div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>Отрасль <span class="req">*</span></label>
+          <select>
+            <option>AI / ML</option>
+            <option>FinTech</option>
+            <option>EdTech</option>
+            <option>HealthTech</option>
+            <option>B2B SaaS</option>
+            <option>MarTech</option>
+            <option>HRTech</option>
+            <option>Другое</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Стадия <span class="req">*</span></label>
+          <select>
+            <option>Pre-seed</option>
+            <option selected>Seed</option>
+            <option>Series A</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <hr class="form-divider">
+
+    <div class="form-section">
+      <div class="form-section-title">Команда</div>
+      <div class="form-section-desc">Минимум один фаундер</div>
+      <div class="team-member">
+        <div class="field-row">
+          <div class="field" style="margin-bottom:12px;">
+            <label>Имя и фамилия <span class="req">*</span></label>
+            <input type="text" value="Алексей Соколов">
+          </div>
+          <div class="field" style="margin-bottom:12px;">
+            <label>Роль <span class="req">*</span></label>
+            <select><option>CEO</option><option>CTO</option><option>CPO</option><option>CMO</option><option>COO</option></select>
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field" style="margin-bottom:0;">
+            <label>Email</label>
+            <input type="email" value="sokolov@vox.ai">
+          </div>
+          <div class="field" style="margin-bottom:0;">
+            <label>Telegram</label>
+            <input type="text" value="@sokolov_vox">
+          </div>
+        </div>
+      </div>
+      <button class="add-btn">+ Добавить фаундера</button>
+    </div>
+
+    <hr class="form-divider">
+
+    <div class="form-section">
+      <div class="form-section-title">Инвестиционный запрос</div>
+      <div class="form-section-desc">Условия и цели раунда</div>
+      <div class="field-row">
+        <div class="field">
+          <label>Сумма раунда (₽) <span class="req">*</span></label>
+          <input type="number" value="30000000" placeholder="30 000 000">
+        </div>
+        <div class="field">
+          <label>Текущая оценка (₽)</label>
+          <input type="number" value="150000000" placeholder="150 000 000">
+        </div>
+      </div>
+      <div class="field">
+        <label>На что идут инвестиции <span class="req">*</span></label>
+        <textarea placeholder="Найм команды разработки, маркетинг, первые корпоративные клиенты..." style="min-height:80px;">Масштабирование команды продаж, интеграция с топ-10 CRM-системами, выход на рынок Enterprise.</textarea>
+      </div>
+      <div class="field">
+        <label>Текущие инвесторы</label>
+        <input type="text" placeholder="Если есть, укажите имена или фонды" value="Самофинансирование">
+      </div>
+    </div>
+
+    <hr class="form-divider">
+
+    <div class="form-section">
+      <div class="form-section-title">Метрики</div>
+      <div class="form-section-desc">Текущее состояние бизнеса</div>
+      <div class="field-row">
+        <div class="field">
+          <label>MRR (₽)</label>
+          <input type="number" placeholder="0" value="420000">
+        </div>
+        <div class="field">
+          <label>Количество клиентов</label>
+          <input type="number" placeholder="0" value="18">
+        </div>
+      </div>
+      <div class="field">
+        <label>Главный вопрос к фонду</label>
+        <textarea placeholder="Чего вам не хватает для роста? Где хотите получить помощь?" style="min-height:80px;">Нам нужна экспертиза по выходу в Enterprise-сегмент и опыт выстраивания корпоративных продаж с циклом сделки 3–6 месяцев.</textarea>
+        <div class="field-hint">Это поможет нам сформировать точную гипотезу роста</div>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <div style="font-size:12px;color:var(--text-3);">Отвечаем в течение 5 рабочих дней</div>
+      <button class="btn btn-primary btn-lg">Отправить заявку →</button>
+    </div>
+
+  </main>
+</div>
+
+</body>
+</html>

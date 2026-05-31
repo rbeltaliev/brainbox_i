@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Карточка стартапа — brainbox_I</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=Geologica:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #f4f2ee; --white: #ffffff; --text: #12151f; --text-2: #444c5e; --text-3: #8891a6;
+      --accent: #1847e3; --accent-hover: #1238c0; --accent-light: #eef1fd; --accent-muted: #c7d0f9;
+      --border: #e0dcd4; --shadow: 0 1px 3px rgba(18,21,31,.06); --shadow-md: 0 8px 32px rgba(18,21,31,.10);
+      --radius: 10px; --radius-lg: 16px; --radius-pill: 100px;
+    }
+    html { font-size: 16px; }
+    body { font-family: 'Onest', sans-serif; background: var(--bg); color: var(--text); -webkit-font-smoothing: antialiased; }
+
+    .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; height: 60px; background: rgba(244,242,238,.88); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 32px; gap: 12px; }
+    .nav-logo { font-family: 'Geologica', sans-serif; font-size: 15px; font-weight: 700; letter-spacing: -0.04em; color: var(--text); text-decoration: none; }
+    .nav-logo .i { color: var(--accent); }
+    .nav-spacer { flex: 1; }
+    .nav-breadcrumb { font-size: 13px; color: var(--text-3); display: flex; align-items: center; gap: 6px; }
+    .nav-breadcrumb a { color: var(--text-2); text-decoration: none; }
+    .nav-breadcrumb a:hover { color: var(--accent); }
+    .btn { font-family: 'Onest', sans-serif; font-size: 13px; font-weight: 600; padding: 8px 18px; border-radius: var(--radius-pill); border: none; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: background .15s; }
+    .btn-primary { background: var(--accent); color: var(--white); }
+    .btn-ghost { background: none; color: var(--text-2); border: 1px solid var(--border); }
+    .btn-ghost:hover { background: var(--white); }
+
+    .page { max-width: 1100px; margin: 0 auto; padding: 80px 32px 64px; display: grid; grid-template-columns: 1fr 340px; gap: 28px; }
+    .main {}
+    .aside {}
+
+    /* HEADER */
+    .startup-header { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 28px; margin-bottom: 20px; }
+    .startup-top { display: flex; gap: 18px; align-items: flex-start; margin-bottom: 20px; }
+    .startup-logo { width: 64px; height: 64px; border-radius: 14px; background: var(--bg); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-family: 'Geologica', sans-serif; font-size: 14px; font-weight: 800; color: var(--text-3); flex-shrink: 0; }
+    h1 { font-family: 'Geologica', sans-serif; font-size: 26px; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 4px; }
+    .startup-site { font-size: 13px; color: var(--accent); text-decoration: none; }
+    .startup-site:hover { text-decoration: underline; }
+    .startup-meta { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+    .tag { font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: var(--radius-pill); display: inline-block; }
+    .tag-blue { background: var(--accent-light); color: var(--accent); }
+    .tag-grey { background: var(--bg); color: var(--text-2); border: 1px solid var(--border); }
+    .tag-green { background: #dcfce7; color: #16a34a; }
+    .tag-orange { background: #fff7ed; color: #c2410c; border: 1px solid #fed7aa; }
+    .startup-desc { font-size: 15px; color: var(--text-2); line-height: 1.65; }
+    .startup-actions { display: flex; gap: 8px; margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border); }
+
+    /* SECTIONS */
+    .card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 22px; margin-bottom: 16px; }
+    .card-title { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-3); margin-bottom: 16px; }
+    .field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .field { }
+    .field-label { font-size: 11px; font-weight: 600; color: var(--text-3); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.06em; }
+    .field-value { font-size: 14px; font-weight: 500; color: var(--text); }
+    .field-value.big { font-family: 'Geologica', sans-serif; font-size: 22px; font-weight: 800; letter-spacing: -0.02em; }
+
+    /* TEAM */
+    .team-list { display: flex; flex-direction: column; gap: 12px; }
+    .team-member { display: flex; gap: 12px; align-items: center; }
+    .team-av { width: 38px; height: 38px; border-radius: 50%; background: var(--accent-light); color: var(--accent); font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .team-name { font-size: 14px; font-weight: 600; }
+    .team-role { font-size: 12px; color: var(--text-2); }
+    .team-contact { font-size: 12px; color: var(--text-3); margin-left: auto; }
+
+    /* HYPO */
+    .hypo-box { background: var(--accent-light); border: 1px solid var(--accent-muted); border-radius: var(--radius); padding: 16px; font-size: 15px; font-style: italic; color: var(--text); line-height: 1.6; margin-bottom: 14px; }
+    .hypo-author { font-size: 12px; color: var(--text-3); margin-bottom: 16px; }
+
+    /* ASIDE */
+    .aside-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px; margin-bottom: 14px; }
+    .aside-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-3); margin-bottom: 14px; }
+    .stat-row { display: flex; justify-content: space-between; align-items: baseline; padding: 8px 0; border-bottom: 1px solid var(--border); }
+    .stat-row:last-child { border-bottom: none; }
+    .stat-name { font-size: 13px; color: var(--text-2); }
+    .stat-val { font-size: 15px; font-weight: 700; }
+    .stat-delta { font-size: 11px; color: #16a34a; font-weight: 600; }
+    .stat-delta.down { color: #dc2626; }
+
+    /* STATUS */
+    .status-step { display: flex; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--border); }
+    .status-step:last-child { border-bottom: none; }
+    .status-dot { width: 18px; height: 18px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; margin-top: 1px; }
+    .status-dot.done { background: var(--accent); color: var(--white); }
+    .status-dot.current { background: var(--accent-light); color: var(--accent); border: 2px solid var(--accent); }
+    .status-dot.pending { background: var(--bg); border: 1px solid var(--border); }
+    .status-name { font-size: 12px; font-weight: 500; }
+    .status-name.active { color: var(--accent); font-weight: 700; }
+    .status-name.done-text { color: var(--text-3); }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html" class="nav-logo">brainbox<span class="i">_I</span></a>
+  <div class="nav-breadcrumb">
+    <span>/</span>
+    <a href="funnel.html">Воронка</a>
+    <span>/</span>
+    <span>VOX</span>
+  </div>
+  <div class="nav-spacer"></div>
+  <a href="ai-match.html" class="btn btn-primary">Подобрать ментора →</a>
+</nav>
+
+<div class="page">
+  <main class="main">
+
+    <!-- HEADER -->
+    <div class="startup-header">
+      <div class="startup-top">
+        <div class="startup-logo">VOX</div>
+        <div>
+          <h1>VOX</h1>
+          <a href="#" class="startup-site">vox.ai</a>
+          <div class="startup-meta">
+            <span class="tag tag-blue">AI / ML</span>
+            <span class="tag tag-blue">B2B SaaS</span>
+            <span class="tag tag-grey">Seed</span>
+            <span class="tag tag-orange">Поиск ментора</span>
+          </div>
+        </div>
+      </div>
+      <div class="startup-desc">
+        Голосовой AI-ассистент для корпоративных клиентов. Автоматизирует входящие звонки, интегрируется с CRM, обучается на базе знаний компании. Снижает нагрузку на колл-центр на 60% при сохранении NPS.
+      </div>
+      <div class="startup-actions">
+        <a href="founders.html" class="btn btn-ghost">Кабинет фаундера</a>
+        <a href="monthly-update.html" class="btn btn-ghost">Monthly updates</a>
+        <a href="ai-match.html" class="btn btn-primary">AI-подбор ментора</a>
+      </div>
+    </div>
+
+    <!-- TEAM -->
+    <div class="card">
+      <div class="card-title">Команда</div>
+      <div class="team-list">
+        <div class="team-member">
+          <div class="team-av">АС</div>
+          <div>
+            <div class="team-name">Алексей Соколов</div>
+            <div class="team-role">CEO · 8 лет в B2B SaaS</div>
+          </div>
+          <div class="team-contact">@sokolov_vox</div>
+        </div>
+        <div class="team-member">
+          <div class="team-av">МП</div>
+          <div>
+            <div class="team-name">Мария Петрова</div>
+            <div class="team-role">CTO · Экс ML-инженер Яндекс</div>
+          </div>
+          <div class="team-contact">@m_petrova</div>
+        </div>
+        <div class="team-member">
+          <div class="team-av">ИГ</div>
+          <div>
+            <div class="team-name">Иван Громов</div>
+            <div class="team-role">Head of Sales · 5 лет в Enterprise</div>
+          </div>
+          <div class="team-contact">@gromov_ivan</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- INVESTMENT -->
+    <div class="card">
+      <div class="card-title">Инвестиционный запрос</div>
+      <div class="field-grid">
+        <div class="field">
+          <div class="field-label">Сумма раунда</div>
+          <div class="field-value big">30 млн ₽</div>
+        </div>
+        <div class="field">
+          <div class="field-label">Оценка компании</div>
+          <div class="field-value big">150 млн ₽</div>
+        </div>
+        <div class="field">
+          <div class="field-label">Цели</div>
+          <div class="field-value">Команда продаж, Enterprise-интеграции</div>
+        </div>
+        <div class="field">
+          <div class="field-label">Текущие инвесторы</div>
+          <div class="field-value">Самофинансирование</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HYPOTHESIS -->
+    <div class="card">
+      <div class="card-title">Гипотеза роста</div>
+      <div class="hypo-box">
+        "Для масштабирования VOX нужен эксперт по Enterprise Sales с опытом перехода B2C → B2B и выстраивания корпоративного цикла продаж длительностью 3–6 месяцев"
+      </div>
+      <div class="hypo-author">Сформулировал: Сергей Мазур · Матч-мейкер · 25 мая 2025</div>
+      <a href="ai-match.html" class="btn btn-primary">Посмотреть AI-подбор ментора →</a>
+    </div>
+
+  </main>
+
+  <aside class="aside">
+
+    <!-- METRICS -->
+    <div class="aside-card">
+      <div class="aside-title">Метрики</div>
+      <div class="stat-row">
+        <span class="stat-name">MRR</span>
+        <div style="text-align:right;"><div class="stat-val">420 000 ₽</div><div class="stat-delta">↑ +18%</div></div>
+      </div>
+      <div class="stat-row">
+        <span class="stat-name">Клиенты</span>
+        <div style="text-align:right;"><div class="stat-val">18</div><div class="stat-delta">↑ +3 за месяц</div></div>
+      </div>
+      <div class="stat-row">
+        <span class="stat-name">MAU</span>
+        <div style="text-align:right;"><div class="stat-val">2 400</div><div class="stat-delta">↑ +22%</div></div>
+      </div>
+      <div class="stat-row">
+        <span class="stat-name">Расходы/мес</span>
+        <div style="text-align:right;"><div class="stat-val">280 000 ₽</div><div class="stat-delta down">выше плана</div></div>
+      </div>
+      <div class="stat-row">
+        <span class="stat-name">Runway</span>
+        <div style="text-align:right;"><div class="stat-val">8 мес</div></div>
+      </div>
+    </div>
+
+    <!-- FUNNEL STATUS -->
+    <div class="aside-card">
+      <div class="aside-title">Статус в воронке</div>
+      <div class="status-step"><div class="status-dot done">✓</div><div class="status-name done-text">Новая заявка</div></div>
+      <div class="status-step"><div class="status-dot done">✓</div><div class="status-name done-text">Назначен матч-мейкер</div></div>
+      <div class="status-step"><div class="status-dot done">✓</div><div class="status-name done-text">Welcome-call</div></div>
+      <div class="status-step"><div class="status-dot done">✓</div><div class="status-name done-text">Таргет</div></div>
+      <div class="status-step"><div class="status-dot done">✓</div><div class="status-name done-text">Гипотеза роста</div></div>
+      <div class="status-step"><div class="status-dot current">→</div><div class="status-name active">Поиск ментора</div></div>
+      <div class="status-step"><div class="status-dot pending"></div><div class="status-name" style="color:var(--text-3);">Найден ментор</div></div>
+      <div class="status-step"><div class="status-dot pending"></div><div class="status-name" style="color:var(--text-3);">Инвестком</div></div>
+      <div class="status-step"><div class="status-dot pending"></div><div class="status-name" style="color:var(--text-3);">Сделка</div></div>
+      <div class="status-step"><div class="status-dot pending"></div><div class="status-name" style="color:var(--text-3);">Портфель</div></div>
+    </div>
+
+    <!-- MATCHMAKER -->
+    <div class="aside-card">
+      <div class="aside-title">Матч-мейкер</div>
+      <div style="display:flex;gap:10px;align-items:center;">
+        <div style="width:36px;height:36px;border-radius:50%;background:var(--accent-light);color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;">СМ</div>
+        <div>
+          <div style="font-size:14px;font-weight:600;">Сергей Мазур</div>
+          <div style="font-size:12px;color:var(--text-2);">Трекер Сколково · 500+ компаний</div>
+        </div>
+      </div>
+    </div>
+
+  </aside>
+</div>
+
+</body>
+</html>
