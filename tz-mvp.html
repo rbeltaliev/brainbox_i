@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ТЗ на MVP — brainbox_I</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=Geologica:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #f4f2ee; --white: #fff; --dark: #12151f;
+      --text: #12151f; --text-2: #444c5e; --text-3: #8891a6;
+      --accent: #1847e3; --accent-light: #eef1fd; --accent-muted: #c7d0f9;
+      --border: #e0dcd4; --radius: 10px; --radius-lg: 16px;
+      --green: #16a34a; --green-bg: #dcfce7;
+      --orange: #c2410c; --orange-bg: #fff7ed;
+      --red: #dc2626; --red-bg: #fef2f2;
+    }
+    html { font-size: 16px; scroll-behavior: smooth; }
+    body { font-family: 'Onest', sans-serif; background: var(--bg); color: var(--text); -webkit-font-smoothing: antialiased; }
+
+    /* NAV */
+    .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; height: 56px; background: rgba(244,242,238,.92); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 32px; gap: 20px; }
+    .nav-logo { font-family: 'Geologica', sans-serif; font-size: 14px; font-weight: 700; letter-spacing: -0.04em; color: var(--text); text-decoration: none; }
+    .nav-logo span { color: var(--accent); }
+    .nav-title { font-size: 13px; color: var(--text-3); }
+    .nav-spacer { flex: 1; }
+    .nav-version { font-size: 11px; font-weight: 700; padding: 3px 10px; background: var(--green-bg); color: var(--green); border-radius: 100px; }
+
+    /* LAYOUT */
+    .layout { display: grid; grid-template-columns: 240px 1fr; min-height: 100vh; padding-top: 56px; }
+
+    /* SIDEBAR */
+    .toc { position: sticky; top: 56px; height: calc(100vh - 56px); overflow-y: auto; padding: 24px 16px; border-right: 1px solid var(--border); background: var(--white); }
+    .toc-section { margin-bottom: 20px; }
+    .toc-group { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-3); padding: 8px 12px 4px; }
+    .toc-link { display: block; font-size: 12px; font-weight: 500; color: var(--text-2); text-decoration: none; padding: 5px 12px; border-radius: 6px; line-height: 1.4; margin-bottom: 1px; }
+    .toc-link:hover { background: var(--accent-light); color: var(--accent); }
+
+    /* CONTENT */
+    .content { padding: 48px 56px 96px; max-width: 860px; }
+
+    /* TYPOGRAPHY */
+    h1 { font-family: 'Geologica', sans-serif; font-size: 36px; font-weight: 900; letter-spacing: -0.04em; line-height: 1.1; margin-bottom: 12px; }
+    h2 { font-family: 'Geologica', sans-serif; font-size: 24px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.2; margin: 48px 0 16px; padding-top: 8px; }
+    h3 { font-family: 'Geologica', sans-serif; font-size: 17px; font-weight: 700; letter-spacing: -0.02em; margin: 28px 0 10px; }
+    h4 { font-size: 14px; font-weight: 700; margin: 20px 0 8px; color: var(--text); }
+    p { font-size: 15px; color: var(--text-2); line-height: 1.7; margin-bottom: 12px; }
+    strong { color: var(--text); font-weight: 600; }
+    code { font-family: 'Courier New', monospace; font-size: 13px; background: var(--bg); border: 1px solid var(--border); border-radius: 4px; padding: 1px 6px; color: var(--accent); }
+
+    /* CARDS */
+    .card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px 24px; margin-bottom: 16px; }
+    .card-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-3); margin-bottom: 12px; }
+
+    /* BADGES */
+    .badge { font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 100px; display: inline-block; }
+    .badge-blue { background: var(--accent-light); color: var(--accent); }
+    .badge-green { background: var(--green-bg); color: var(--green); }
+    .badge-orange { background: var(--orange-bg); color: var(--orange); border: 1px solid #fed7aa; }
+    .badge-red { background: var(--red-bg); color: var(--red); }
+    .badge-grey { background: var(--bg); color: var(--text-2); border: 1px solid var(--border); }
+    .badge-dark { background: var(--dark); color: #fff; }
+
+    /* DIVIDER */
+    .divider { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
+
+    /* ROLE TABLE */
+    .role-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-bottom: 20px; }
+    .role-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 18px 20px; }
+    .role-title { font-size: 15px; font-weight: 700; margin-bottom: 4px; display: flex; align-items: center; gap: 8px; }
+    .role-desc { font-size: 13px; color: var(--text-2); line-height: 1.5; margin-bottom: 12px; }
+    .role-can { font-size: 12px; display: flex; flex-direction: column; gap: 4px; }
+    .role-can-item { display: flex; gap: 6px; color: var(--text-2); }
+    .role-can-item::before { content: '→'; color: var(--accent); flex-shrink: 0; font-weight: 700; }
+
+    /* FLOW */
+    .flow { display: flex; flex-direction: column; gap: 0; margin-bottom: 20px; }
+    .flow-step { display: flex; gap: 14px; padding-bottom: 16px; }
+    .flow-step:last-child { padding-bottom: 0; }
+    .flow-line { display: flex; flex-direction: column; align-items: center; }
+    .flow-dot { width: 28px; height: 28px; border-radius: 50%; background: var(--accent-light); color: var(--accent); font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .flow-connector { width: 1px; flex: 1; background: var(--border); margin: 3px 0; min-height: 12px; }
+    .flow-body { padding-top: 3px; }
+    .flow-title { font-size: 14px; font-weight: 600; margin-bottom: 3px; }
+    .flow-desc { font-size: 13px; color: var(--text-2); line-height: 1.45; }
+
+    /* TABLE */
+    table { width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 13px; }
+    th { background: var(--bg); border: 1px solid var(--border); padding: 8px 12px; text-align: left; font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-3); }
+    td { border: 1px solid var(--border); padding: 9px 12px; color: var(--text-2); line-height: 1.4; vertical-align: top; }
+    tr:nth-child(even) td { background: var(--bg); }
+
+    /* AI BLOCK */
+    .ai-block { background: var(--dark); border-radius: var(--radius-lg); padding: 24px 28px; margin-bottom: 20px; }
+    .ai-block h3 { color: var(--white); margin-top: 0; margin-bottom: 12px; }
+    .ai-block p { color: rgba(255,255,255,.6); }
+    .ai-block code { background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.12); color: #8ba4ff; }
+    .ai-step { display: flex; gap: 12px; margin-bottom: 14px; }
+    .ai-step-num { width: 24px; height: 24px; border-radius: 50%; background: var(--accent); color: #fff; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+    .ai-step-title { font-size: 13px; font-weight: 600; color: #fff; margin-bottom: 3px; }
+    .ai-step-desc { font-size: 13px; color: rgba(255,255,255,.55); line-height: 1.5; }
+
+    /* INFO / WARNING BOXES */
+    .info-box { border-radius: var(--radius); padding: 14px 16px; margin-bottom: 16px; font-size: 13px; line-height: 1.55; }
+    .info-box.blue { background: var(--accent-light); border: 1px solid var(--accent-muted); color: var(--accent); }
+    .info-box.orange { background: var(--orange-bg); border: 1px solid #fed7aa; color: var(--orange); }
+    .info-box.green { background: var(--green-bg); border: 1px solid #bbf7d0; color: #15803d; }
+    .info-box strong { color: inherit; }
+
+    /* PROMPT BLOCK */
+    .prompt-block { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; margin-bottom: 16px; font-size: 13px; color: var(--text-2); line-height: 1.65; font-style: italic; }
+    .prompt-block strong { color: var(--text); font-style: normal; }
+
+    /* SECTION ANCHOR OFFSET */
+    [id] { scroll-margin-top: 72px; }
+
+    /* LIST */
+    ul.req { list-style: none; padding: 0; margin-bottom: 16px; }
+    ul.req li { font-size: 14px; color: var(--text-2); line-height: 1.55; padding: 5px 0; border-bottom: 1px solid var(--border); display: flex; gap: 8px; }
+    ul.req li:last-child { border-bottom: none; }
+    ul.req li::before { content: '✓'; color: var(--green); font-weight: 700; font-size: 12px; flex-shrink: 0; margin-top: 2px; }
+    ul.out { list-style: none; padding: 0; }
+    ul.out li { font-size: 14px; color: var(--text-3); padding: 4px 0; display: flex; gap: 8px; }
+    ul.out li::before { content: '✗'; color: var(--red); flex-shrink: 0; }
+
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+      .toc { display: none; }
+      .content { padding: 32px 24px; }
+      .role-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html" class="nav-logo">brainbox<span>_I</span></a>
+  <span class="nav-title">Техническое задание на MVP</span>
+  <div class="nav-spacer"></div>
+  <span class="nav-version">v1.0 · Июнь 2025</span>
+</nav>
+
+<div class="layout">
+
+  <!-- TOC -->
+  <aside class="toc">
+    <div class="toc-section">
+      <div class="toc-group">Введение</div>
+      <a href="#context" class="toc-link">Контекст и цели</a>
+      <a href="#roles" class="toc-link">Роли и доступы</a>
+      <a href="#scope" class="toc-link">Границы MVP</a>
+    </div>
+    <div class="toc-section">
+      <div class="toc-group">Модули</div>
+      <a href="#m1" class="toc-link">M1 · Форма фаундера</a>
+      <a href="#m2" class="toc-link">M2 · Регистрация ментора</a>
+      <a href="#m3" class="toc-link">M3 · Каталог менторов</a>
+      <a href="#m4" class="toc-link">M4 · Панель администратора</a>
+      <a href="#m5" class="toc-link">M5 · Monthly Update</a>
+      <a href="#m6" class="toc-link">M6 · AI-агент матчинга</a>
+    </div>
+    <div class="toc-section">
+      <div class="toc-group">Технические детали</div>
+      <a href="#data" class="toc-link">Схема данных</a>
+      <a href="#api" class="toc-link">Claude API</a>
+      <a href="#nonfunc" class="toc-link">Нефункциональные</a>
+      <a href="#questions" class="toc-link">Вопросы к CTO</a>
+    </div>
+  </aside>
+
+  <!-- CONTENT -->
+  <main class="content">
+
+    <!-- HEADER -->
+    <div style="margin-bottom:8px;display:flex;gap:8px;flex-wrap:wrap;">
+      <span class="badge badge-dark">brainbox_I · Smart Fund</span>
+      <span class="badge badge-orange">Тестовое задание · CTO</span>
+      <span class="badge badge-blue">MVP v1</span>
+    </div>
+    <h1>Техническое задание<br>на MVP системы фонда</h1>
+    <p style="font-size:17px;color:var(--text-2);max-width:620px;line-height:1.65;">
+      Документ описывает минимально достаточный продукт для автоматизации ключевого процесса фонда brainbox_I: Monthly Update портфельного стартапа с AI-матчингом ментора.
+    </p>
+    <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;">
+      <div class="info-box blue" style="margin:0;flex:1;min-width:200px;">
+        <strong>Срок:</strong> Кандидат определяет самостоятельно и указывает его в ответе на задание. Срок — часть оценки.
+      </div>
+      <div class="info-box green" style="margin:0;flex:1;min-width:200px;">
+        <strong>Хостинг:</strong> Selectel (российское облако). CTO определяет конфигурацию.
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- CONTEXT -->
+    <h2 id="context">Контекст и цели</h2>
+    <p>
+      Фонд brainbox_I — венчурный фонд с 5 портфельными стартапами и базой из <strong>80+ менторов</strong>.
+      Центральная идея фонда: каждый стартап получает профильного ментора-партнера, который защищает инвестицию своей экспертизой.
+    </p>
+    <p>
+      <strong>Боль, которую решает MVP:</strong> менторы проводят ежемесячные звонки с фаундерами, но результат звонка нигде не фиксируется,
+      гипотезы роста не формализуются, а подбор дополнительных экспертов из базы происходит вручную и бессистемно.
+    </p>
+
+    <div class="card">
+      <div class="card-title">Ключевой кейс MVP</div>
+      <div class="flow">
+        <div class="flow-step">
+          <div class="flow-line"><div class="flow-dot">1</div><div class="flow-connector"></div></div>
+          <div class="flow-body"><div class="flow-title">Ментор-партнер проводит созвон с фаундером</div><div class="flow-desc">По стандартному списку вопросов фонда. Созвон записывается или транскрибируется внешним сервисом.</div></div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-line"><div class="flow-dot">2</div><div class="flow-connector"></div></div>
+          <div class="flow-body"><div class="flow-title">Ментор загружает транскрипт в систему</div><div class="flow-desc">Загружает .txt файл на страницу Monthly Update портфельного стартапа.</div></div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-line"><div class="flow-dot">3</div><div class="flow-connector"></div></div>
+          <div class="flow-body"><div class="flow-title">AI-агент анализирует транскрипт (Claude API)</div><div class="flow-desc">Выделяет запросы фаундера, формулирует гипотезы роста, определяет ключевые барьеры.</div></div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-line"><div class="flow-dot">4</div><div class="flow-connector"></div></div>
+          <div class="flow-body"><div class="flow-title">AI сопоставляет гипотезы с базой менторов</div><div class="flow-desc">Находит релевантных экспертов из 80+ анкет (партнеры и независимые) с процентом совпадения и обоснованием.</div></div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-line"><div class="flow-dot">5</div></div>
+          <div class="flow-body"><div class="flow-title">Результат виден на странице Monthly Update</div><div class="flow-desc">Summary звонка · Риски · Следующие шаги · Список рекомендованных менторов.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- ROLES -->
+    <h2 id="roles">Роли и права доступа</h2>
+    <p>В системе 4 роли. Переход между ролями осуществляет <strong>Администратор</strong> вручную через панель управления.</p>
+
+    <div class="role-grid">
+      <div class="role-card">
+        <div class="role-title"><span class="badge badge-grey">Аноним</span></div>
+        <div class="role-desc">Любой посетитель сайта. Регистрация не требуется.</div>
+        <div class="role-can">
+          <div class="role-can-item">Видит Каталог менторов</div>
+          <div class="role-can-item">Заполняет форму заявки фаундера</div>
+          <div class="role-can-item">После отправки видит экран "Заявка принята" и больше ничего не может</div>
+        </div>
+      </div>
+      <div class="role-card">
+        <div class="role-title"><span class="badge badge-blue">Ментор · Независимый</span></div>
+        <div class="role-desc">Зарегистрированный эксперт. Статус присваивает Администратор.</div>
+        <div class="role-can">
+          <div class="role-can-item">Видит Каталог менторов</div>
+          <div class="role-can-item">Видит запросы от портфельных стартапов (только публичные гипотезы роста)</div>
+          <div class="role-can-item">Может написать ментору-партнеру, курирующему стартап</div>
+          <div class="role-can-item">Не видит транскрипты, полные данные стартапов и базу анкет</div>
+        </div>
+      </div>
+      <div class="role-card">
+        <div class="role-title"><span class="badge badge-dark">Ментор · Партнер (LP)</span></div>
+        <div class="role-desc">LP фонда. Статус присваивает Администратор.</div>
+        <div class="role-can">
+          <div class="role-can-item">Полный доступ ко всей информации в системе</div>
+          <div class="role-can-item">Видит все портфельные стартапы и их Monthly Updates</div>
+          <div class="role-can-item">Загружает транскрипты на свои подопечные стартапы</div>
+          <div class="role-can-item">Видит AI-матчинг и результаты анализа</div>
+          <div class="role-can-item">Видит все анкеты менторов в базе</div>
+        </div>
+      </div>
+      <div class="role-card">
+        <div class="role-title"><span class="badge badge-orange">Администратор</span></div>
+        <div class="role-desc">Сотрудник фонда. Управляет всей системой.</div>
+        <div class="role-can">
+          <div class="role-can-item">Все права ментора-партнера</div>
+          <div class="role-can-item">Меняет роль ментора: независимый → партнер</div>
+          <div class="role-can-item">Присваивает статус "Портфельный" стартапу</div>
+          <div class="role-can-item">Назначает ментора-партнера на стартап</div>
+          <div class="role-can-item">Управляет данными: менторы, стартапы, пользователи</div>
+          <div class="role-can-item">Импортирует CSV с анкетами менторов</div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- SCOPE -->
+    <h2 id="scope">Границы MVP</h2>
+    <p>Что входит в MVP, а что остаётся за рамками. CTO обязан реализовать всё из раздела IN SCOPE.</p>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;">
+      <div class="card">
+        <div class="card-title" style="color:var(--green);">✓ In Scope — делаем</div>
+        <ul class="req" style="margin-bottom:0;">
+          <li>Публичная форма фаундера без регистрации</li>
+          <li>Email-регистрация ментора с одноразовым паролем</li>
+          <li>Профиль ментора (заполнение анкеты из 17 вопросов)</li>
+          <li>Каталог менторов — публичный</li>
+          <li>Панель администратора (управление ролями)</li>
+          <li>Страницы портфельных стартапов</li>
+          <li>Загрузка транскрипта (.txt)</li>
+          <li>AI-анализ транскрипта (Claude API)</li>
+          <li>AI-матчинг гипотез с анкетами менторов</li>
+          <li>Страница Monthly Update с результатом AI</li>
+          <li>Импорт начальной базы менторов (CSV → БД)</li>
+          <li>Защита формы фаундера от спама (captcha или honeypot)</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title" style="color:var(--red);">✗ Out of Scope — не делаем</div>
+        <ul class="out">
+          <li>Мобильное приложение</li>
+          <li>Push-уведомления</li>
+          <li>Чат внутри системы (используем внешние каналы)</li>
+          <li>Интеграция с календарем</li>
+          <li>Автоматическая транскрибация аудио</li>
+          <li>Оплата и финансовые транзакции</li>
+          <li>Доступ фаундера в систему после подачи заявки</li>
+          <li>Публичные страницы отдельных стартапов</li>
+          <li>Аналитика и дашборд фонда</li>
+          <li>API для сторонних интеграций</li>
+        </ul>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- M1 -->
+    <h2 id="m1">M1 · Форма заявки фаундера</h2>
+    <p>Публичная анкета на отдельной странице. Доступна без регистрации. После отправки — экран подтверждения без дальнейшего доступа.</p>
+
+    <div class="info-box orange">
+      <strong>Важно:</strong> фаундер после отправки заявки не получает доступ в систему. Никакого кабинета, никаких уведомлений. Это сознательное решение фонда для MVP.
+    </div>
+
+    <h3>Поля формы</h3>
+    <table>
+      <thead><tr><th>Код</th><th>Вопрос</th><th>Тип</th><th>Обяз.</th></tr></thead>
+      <tbody>
+        <tr><td><code>qf1</code></td><td>Как вас зовут? (Фамилия и Имя)</td><td>text</td><td>✓</td></tr>
+        <tr><td><code>qf2</code></td><td>Сколько вам лет?</td><td>number</td><td>✓</td></tr>
+        <tr><td><code>qf3</code></td><td>В каком городе вы находитесь?</td><td>text</td><td>✓</td></tr>
+        <tr><td><code>qf4</code></td><td>Где и кем работали до того, как стали предпринимателем? (до 25 знаков)</td><td>text</td><td></td></tr>
+        <tr><td><code>qf5</code></td><td>Перечислите ваши сильные стороны и ключевые компетенции (до 90 знаков)</td><td>text</td><td>✓</td></tr>
+        <tr><td><code>qf6</code></td><td>Какими достижениями вы гордитесь?</td><td>textarea</td><td>✓</td></tr>
+        <tr><td><code>qf7</code></td><td>Какой у вас предпринимательский опыт? (лет)</td><td>number</td><td></td></tr>
+        <tr><td><code>qf8</code></td><td>Как называется ваш проект (стартап)?</td><td>text</td><td>✓</td></tr>
+        <tr><td><code>qf9</code></td><td>Есть ли сайт или страница проекта? (ссылка)</td><td>url</td><td></td></tr>
+        <tr><td><code>qf10</code></td><td>Когда вы запустили проект? (месяц/год)</td><td>text</td><td></td></tr>
+        <tr><td><code>qf11</code></td><td>В какой категории бизнеса вы работаете? (IT, fintech, edtech…)</td><td>text</td><td>✓</td></tr>
+        <tr><td><code>qf12</code></td><td>Что делает ваш проект? (1–2 предложения)</td><td>textarea</td><td>✓</td></tr>
+        <tr><td><code>qf13</code></td><td>Сколько человек в команде?</td><td>number</td><td></td></tr>
+        <tr><td><code>qf14</code></td><td>Вы совмещаете проект с работой в найме?</td><td>boolean</td><td></td></tr>
+        <tr><td><code>qf15</code></td><td>Какие результаты достигнуты на данный момент? (MVP, клиенты, выручка…)</td><td>textarea</td><td>✓</td></tr>
+        <tr><td><code>qf16</code></td><td>Какая помощь вам сейчас нужна? (инвестиции, менторство, команда…)</td><td>textarea</td><td>✓</td></tr>
+        <tr><td><code>qf17</code></td><td>В чём ваш основной вызов прямо сейчас?</td><td>textarea</td><td>✓</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Защита от спама</h3>
+    <p>Реализовать одно из двух на выбор CTO:</p>
+    <ul class="req">
+      <li><strong>Honeypot-поле:</strong> скрытое поле <code>website</code> — если заполнено, заявка игнорируется. Простое и бесплатное.</li>
+      <li><strong>Google reCAPTCHA v3:</strong> невидимая защита, score &lt; 0.5 — отклонить. Требует Google API ключ.</li>
+    </ul>
+    <p>После отправки: заявка сохраняется в БД со статусом <code>pending</code>. Пользователь видит страницу "Ваша заявка принята". Больше ничего не происходит.</p>
+
+    <hr class="divider">
+
+    <!-- M2 -->
+    <h2 id="m2">M2 · Регистрация и профиль ментора</h2>
+    <p>Регистрация только по email. Вместо постоянного пароля — одноразовый код на каждую сессию (magic link или OTP-код).</p>
+
+    <h3>Флоу регистрации</h3>
+    <div class="flow">
+      <div class="flow-step">
+        <div class="flow-line"><div class="flow-dot">1</div><div class="flow-connector"></div></div>
+        <div class="flow-body"><div class="flow-title">Страница регистрации</div><div class="flow-desc">Поля: <strong>Имя</strong>, <strong>Фамилия</strong>, <strong>Email</strong>. Никакого пароля.</div></div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-line"><div class="flow-dot">2</div><div class="flow-connector"></div></div>
+        <div class="flow-body"><div class="flow-title">Система отправляет письмо с 6-значным OTP-кодом</div><div class="flow-desc">Код действует <strong>15 минут</strong>. Только для одной сессии — после входа инвалидируется.</div></div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-line"><div class="flow-dot">3</div><div class="flow-connector"></div></div>
+        <div class="flow-body"><div class="flow-title">Ментор вводит код</div><div class="flow-desc">3 попытки, затем блокировка на 5 минут. После успеха — сессия авторизована.</div></div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-line"><div class="flow-dot">4</div><div class="flow-connector"></div></div>
+        <div class="flow-body"><div class="flow-title">Анкета профиля</div><div class="flow-desc">При первом входе — обязательное заполнение анкеты из 17 вопросов. Без этого остальной интерфейс недоступен.</div></div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-line"><div class="flow-dot">5</div></div>
+        <div class="flow-body"><div class="flow-title">Статус: <code>pending</code></div><div class="flow-desc">Ментор зарегистрирован, но роль (независимый/партнер) присваивает Администратор вручную. До присвоения — ограниченный доступ.</div></div>
+      </div>
+    </div>
+
+    <div class="info-box blue">
+      <strong>Повторный вход:</strong> каждый раз через email + новый OTP-код. Постоянный пароль не хранится. Это упрощает систему и повышает безопасность для MVP.
+    </div>
+
+    <h3>Поля анкеты профиля ментора</h3>
+    <table>
+      <thead><tr><th>Код</th><th>Вопрос</th><th>Тип</th><th>Использует AI</th></tr></thead>
+      <tbody>
+        <tr><td><code>qm1</code></td><td>Имя и Фамилия</td><td>text</td><td></td></tr>
+        <tr><td><code>qm2</code></td><td>Сколько вам лет?</td><td>number</td><td></td></tr>
+        <tr><td><code>qm3</code></td><td>В каком городе вы находитесь?</td><td>text</td><td></td></tr>
+        <tr><td><code>qm4</code></td><td>Чем вы занимаетесь сейчас? (должность и компания, до 25 знаков)</td><td>text</td><td></td></tr>
+        <tr><td><code>qm5</code></td><td>Перечислите ваши сильные стороны и ключевые компетенции (до 90 знаков)</td><td>text</td><td>✓ матчинг</td></tr>
+        <tr><td><code>qm6</code></td><td>Какими достижениями вы гордитесь?</td><td>textarea</td><td>✓ матчинг</td></tr>
+        <tr><td><code>qm7</code></td><td>Сколько лет вашему опыту предпринимательства?</td><td>number</td><td></td></tr>
+        <tr><td><code>qm8</code></td><td>В каких отраслях у вас наибольший опыт? (до 90 знаков)</td><td>text</td><td>✓ матчинг</td></tr>
+        <tr><td><code>qm9</code></td><td>Был ли у вас опыт менторства?</td><td>boolean + textarea</td><td></td></tr>
+        <tr><td><code>qm10</code></td><td>Стартапы на какой стадии вам наиболее интересны?</td><td>multiselect</td><td></td></tr>
+        <tr><td><code>qm11</code></td><td>Стартапы в какой отрасли вам интересно консультировать?</td><td>textarea</td><td>✓ матчинг</td></tr>
+        <tr><td><code>qm12</code></td><td>В каких темах интересно помогать фаундеру?</td><td>multiselect</td><td>✓ матчинг</td></tr>
+        <tr><td><code>qm13</code></td><td>Готовы зарезервировать 2 часа в месяц для созвонов?</td><td>boolean</td><td></td></tr>
+        <tr><td><code>qm14</code></td><td>Готовы дистанционно участвовать в Совете директоров?</td><td>boolean</td><td></td></tr>
+        <tr><td><code>qm15</code></td><td>Готовы инвестировать собственные средства в капитал фонда?</td><td>boolean + text</td><td></td></tr>
+        <tr><td><code>qm16</code></td><td>Интересно ли увеличивать собственную долю в стартапе?</td><td>boolean</td><td></td></tr>
+        <tr><td><code>qm17</code></td><td>В чём сила?</td><td>textarea</td><td></td></tr>
+      </tbody>
+    </table>
+
+    <hr class="divider">
+
+    <!-- M3 -->
+    <h2 id="m3">M3 · Каталог менторов</h2>
+    <p>
+      Публичная страница. Доступна всем без регистрации. Отображает карточки менторов из базы.
+      Стартовый набор — <strong>80+ анкет из CSV-файла</strong>, который загружает Администратор при первом запуске.
+    </p>
+
+    <h3>Карточка ментора в каталоге</h3>
+    <ul class="req">
+      <li>Имя и Фамилия (<code>qm1</code>)</li>
+      <li>Должность и компания (<code>qm4</code>)</li>
+      <li>Сильные стороны / компетенции (<code>qm5</code>)</li>
+      <li>Отрасли опыта (<code>qm8</code>)</li>
+      <li>Темы помощи (<code>qm12</code>)</li>
+      <li>Город (<code>qm3</code>)</li>
+      <li>Готовность к созвонам (<code>qm13</code>) — иконка-индикатор</li>
+      <li>Роль: Партнер фонда / Независимый эксперт <span class="badge badge-blue" style="font-size:10px;">badge</span></li>
+    </ul>
+
+    <div class="info-box blue">
+      <strong>Не показывать публично:</strong> email ментора, Telegram, ответы на вопросы qm15 (инвестиции), qm16, qm17, qm18. Контакт — только через кнопку внутри системы.
+    </div>
+
+    <h3>Фильтрация каталога</h3>
+    <ul class="req">
+      <li>Фильтр по отрасли (<code>qm8</code>, <code>qm11</code>)</li>
+      <li>Фильтр по теме помощи (<code>qm12</code>)</li>
+      <li>Фильтр: Партнер / Независимый</li>
+      <li>Поиск по имени или компании</li>
+    </ul>
+
+    <hr class="divider">
+
+    <!-- M4 -->
+    <h2 id="m4">M4 · Панель администратора</h2>
+    <p>Отдельный защищённый раздел для сотрудников фонда. Доступ по отдельным учётным данным.</p>
+
+    <h3>Функциональность</h3>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+      <div class="card" style="margin-bottom:0;">
+        <div class="card-title">Управление менторами</div>
+        <ul class="req" style="margin-bottom:0;">
+          <li>Список всех зарегистрированных менторов</li>
+          <li>Изменение роли: pending → независимый → партнер</li>
+          <li>Просмотр полной анкеты ментора</li>
+          <li>Импорт CSV → начальная загрузка базы</li>
+          <li>Ручное добавление ментора</li>
+        </ul>
+      </div>
+      <div class="card" style="margin-bottom:0;">
+        <div class="card-title">Управление стартапами</div>
+        <ul class="req" style="margin-bottom:0;">
+          <li>Список всех заявок фаундеров</li>
+          <li>Просмотр анкеты фаундера</li>
+          <li>Изменение статуса: pending → portfolio</li>
+          <li>Назначение ментора-партнера на стартап</li>
+          <li>Создание страницы стартапа вручную</li>
+        </ul>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- M5 -->
+    <h2 id="m5">M5 · Monthly Update — страница стартапа</h2>
+    <p>Центральная страница системы. Доступна только ментору-партнеру, назначенному на стартап, и Администратору.</p>
+
+    <h3>Состав страницы</h3>
+    <ul class="req">
+      <li><strong>Шапка стартапа:</strong> название, категория, дата входа в портфель, ментор-партнер</li>
+      <li><strong>Блок загрузки транскрипта:</strong> drag-and-drop или кнопка выбора .txt файла</li>
+      <li><strong>Блок AI-анализа:</strong> появляется после загрузки и обработки (статус: загружается → готово)</li>
+      <li><strong>Журнал обновлений:</strong> хронологический список прошлых Monthly Updates с датами</li>
+    </ul>
+
+    <h3>Блок AI-анализа (после обработки)</h3>
+    <ul class="req">
+      <li>📋 <strong>Summary звонка</strong> — краткий пересказ 3–5 предложений</li>
+      <li>⚠️ <strong>Выявленные риски</strong> — список угроз и проблем, упомянутых фаундером</li>
+      <li>🙋 <strong>Запросы фаундера</strong> — конкретные просьбы о помощи</li>
+      <li>💡 <strong>Гипотезы роста</strong> — 1–3 сформулированных гипотезы в формате "Для роста нужен эксперт по X"</li>
+      <li>→ <strong>Следующие шаги</strong> — рекомендованные действия от AI</li>
+      <li>🤖 <strong>Матчинг менторов</strong> — список из 3–5 экспертов по каждой гипотезе (см. M6)</li>
+    </ul>
+
+    <div class="info-box orange">
+      <strong>UX-требование:</strong> пока AI обрабатывает транскрипт, показывать skeleton/loader с текстом "AI анализирует разговор…". Обработка не должна блокировать UI — реализовать асинхронно (job queue или polling).
+    </div>
+
+    <hr class="divider">
+
+    <!-- M6 -->
+    <h2 id="m6">M6 · AI-агент матчинга</h2>
+
+    <div class="ai-block">
+      <h3>🤖 Как работает AI-агент</h3>
+      <p>Два последовательных вызова Claude API. Используется модель <strong>claude-sonnet-4-5</strong> или новее.</p>
+      <div style="margin-top:20px;">
+        <div class="ai-step">
+          <div class="ai-step-num">1</div>
+          <div><div class="ai-step-title">Анализ транскрипта → структурированный вывод</div><div class="ai-step-desc">На вход подаётся текст транскрипта. AI возвращает JSON с полями: summary, risks[], founder_requests[], growth_hypotheses[], next_steps[]</div></div>
+        </div>
+        <div class="ai-step">
+          <div class="ai-step-num">2</div>
+          <div><div class="ai-step-title">Матчинг гипотез с анкетами менторов</div><div class="ai-step-desc">На вход подаётся каждая гипотеза роста + весь список анкет менторов (поля qm5, qm6, qm8, qm11, qm12). AI возвращает ranked список: ментор, score (0–100), reasoning.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <h3>Системный промпт — Шаг 1 (анализ транскрипта)</h3>
+    <div class="prompt-block">
+      <strong>Ты — аналитик венчурного фонда brainbox_I.</strong> Проанализируй транскрипт ежемесячного звонка ментора с фаундером стартапа.<br><br>
+      Верни ответ строго в JSON-формате:<br>
+      <code>{"summary": "...", "risks": ["..."], "founder_requests": ["..."], "growth_hypotheses": ["Для роста нужен эксперт по X, потому что Y"], "next_steps": ["..."]}</code><br><br>
+      Гипотезы роста формулируй в формате: <em>"Для масштабирования [название стартапа] нужен эксперт по [конкретная область], потому что [проблема]"</em>.
+      Выдели 1–3 гипотезы. Не выдумывай — только то, что есть в тексте.
+    </div>
+
+    <h3>Системный промпт — Шаг 2 (матчинг менторов)</h3>
+    <div class="prompt-block">
+      <strong>Ты — AI-ассистент венчурного фонда brainbox_I.</strong><br><br>
+      Гипотеза роста стартапа: <code>{hypothesis}</code><br><br>
+      Ниже — список менторов фонда с их анкетами. Для каждого ментора оцени релевантность по шкале 0–100 и объясни, почему он может помочь именно с этой гипотезой.<br><br>
+      Верни JSON: <code>[{"mentor_id": 1, "score": 92, "reasoning": "...", "key_matches": ["...", "..."]}]</code><br><br>
+      Покажи только менторов со score > 60. Отсортируй по убыванию score. Максимум 5 менторов на гипотезу. Обоснование — конкретно, без воды.
+    </div>
+
+    <h3>Ограничения и обработка ошибок</h3>
+    <ul class="req">
+      <li>Максимальный размер транскрипта: <strong>100 000 токенов</strong>. Если больше — разбить на части с перекрытием.</li>
+      <li>Если Claude вернул не JSON — повторить запрос до 3 раз, затем показать ошибку.</li>
+      <li>Хранить raw-ответ API в БД рядом с обработанными данными для дебага.</li>
+      <li>Все вызовы API логировать с временем, моделью, токенами (мониторинг расходов).</li>
+    </ul>
+
+    <hr class="divider">
+
+    <!-- DATA -->
+    <h2 id="data">Схема данных</h2>
+    <p>Минимальная схема для MVP. CTO может расширять и нормализовать по своему усмотрению.</p>
+
+    <h3>Основные сущности</h3>
+    <table>
+      <thead><tr><th>Таблица</th><th>Ключевые поля</th><th>Примечание</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><code>mentors</code></td>
+          <td>id, email, role (pending | independent | partner), status (active | inactive), qm1–qm17, created_at, tg_name</td>
+          <td>Роль проставляет Администратор</td>
+        </tr>
+        <tr>
+          <td><code>founders</code></td>
+          <td>id, qf1–qf17, status (pending | portfolio | rejected), created_at</td>
+          <td>Email не обязателен — заявка анонимная</td>
+        </tr>
+        <tr>
+          <td><code>startups</code></td>
+          <td>id, founder_id, name, category, partner_mentor_id, portfolio_date, status</td>
+          <td>Создаётся Администратором при переводе в портфель</td>
+        </tr>
+        <tr>
+          <td><code>monthly_updates</code></td>
+          <td>id, startup_id, mentor_id, month (YYYY-MM), transcript_text, ai_summary, ai_risks[], ai_requests[], ai_hypotheses[], ai_next_steps[], ai_raw_response, processed_at, created_at</td>
+          <td>Один update = один звонок = один транскрипт</td>
+        </tr>
+        <tr>
+          <td><code>mentor_matches</code></td>
+          <td>id, monthly_update_id, hypothesis_text, mentor_id, score (0–100), reasoning, key_matches[]</td>
+          <td>Один update может содержать несколько гипотез × несколько менторов</td>
+        </tr>
+        <tr>
+          <td><code>otp_sessions</code></td>
+          <td>id, email, code_hash, expires_at, used_at</td>
+          <td>Хранить хэш кода, не сам код</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Импорт начальной базы менторов</h3>
+    <p>
+      В распоряжении фонда есть CSV-файл с <strong>80+ ответами менторов</strong> (реальные данные).
+      Структура колонок: <code>ID; tg_name; cl_id; cur_date; first_datetime; q1…q17</code>
+      — соответствуют полям <code>qm1–qm17</code>.
+    </p>
+    <div class="info-box green">
+      <strong>Задача CTO:</strong> реализовать скрипт импорта CSV → таблица <code>mentors</code>. Запускается один раз при первичном развёртывании. CSV предоставит фонд. Дубликаты (одинаковый tg_name) — пропускать.
+    </div>
+
+    <hr class="divider">
+
+    <!-- API -->
+    <h2 id="api">Claude API — технические детали</h2>
+
+    <table>
+      <thead><tr><th>Параметр</th><th>Значение</th></tr></thead>
+      <tbody>
+        <tr><td>Провайдер</td><td>Anthropic Claude API (anthropic.com)</td></tr>
+        <tr><td>Рекомендуемая модель</td><td><code>claude-sonnet-4-5</code> или актуальный Sonnet на момент разработки</td></tr>
+        <tr><td>Вызов №1 (анализ)</td><td>~2 000–8 000 токенов вход, ~500–1 000 токенов выход</td></tr>
+        <tr><td>Вызов №2 (матчинг)</td><td>~4 000–12 000 токенов вход (все анкеты), ~500–800 токенов выход</td></tr>
+        <tr><td>Формат ответа</td><td>JSON, принудительно через <code>response_format</code> или system prompt</td></tr>
+        <tr><td>Хранение ключа</td><td>Environment variable <code>ANTHROPIC_API_KEY</code>, не в коде</td></tr>
+        <tr><td>Кэширование</td><td>Рекомендуется Prompt Caching для анкет менторов (они не меняются)</td></tr>
+        <tr><td>Таймаут</td><td>60 секунд на вызов, 3 retry с exponential backoff</td></tr>
+      </tbody>
+    </table>
+
+    <div class="info-box blue">
+      <strong>Оптимизация расходов:</strong> список анкет менторов — статичные данные. Используйте <strong>Anthropic Prompt Caching</strong> для кэширования контекста с анкетами между вызовами. Это снизит стоимость матчинга на 70–90%.
+    </div>
+
+    <hr class="divider">
+
+    <!-- NON-FUNC -->
+    <h2 id="nonfunc">Нефункциональные требования</h2>
+
+    <table>
+      <thead><tr><th>Требование</th><th>Значение</th></tr></thead>
+      <tbody>
+        <tr><td>Хостинг</td><td>Selectel Cloud (Россия). Конфигурацию определяет CTO.</td></tr>
+        <tr><td>Стек</td><td>На усмотрение CTO. Предпочтителен AI-native подход. Рекомендации: Next.js / FastAPI / Supabase / PostgreSQL.</td></tr>
+        <tr><td>Авторизация</td><td>JWT сессии для авторизованных ролей. Хранить в httpOnly cookie.</td></tr>
+        <tr><td>Безопасность</td><td>HTTPS обязательно. SQL injection protection. Rate limiting на email OTP (не чаще 1 раза в 60 секунд).</td></tr>
+        <tr><td>Загрузка файлов</td><td>Только .txt. Максимум 5 МБ. Хранить на S3-совместимом хранилище Selectel.</td></tr>
+        <tr><td>AI-обработка</td><td>Асинхронная. Не блокировать UI. Статус обработки: queued → processing → done / error.</td></tr>
+        <tr><td>Мобильная версия</td><td>Адаптивная верстка (responsive). Каталог менторов и форма фаундера — приоритет.</td></tr>
+        <tr><td>Логирование</td><td>Все вызовы AI логировать: модель, токены in/out, стоимость, время. Хранить 90 дней.</td></tr>
+        <tr><td>Документация</td><td>README с инструкцией по развёртыванию на Selectel. ENV переменные задокументированы.</td></tr>
+      </tbody>
+    </table>
+
+    <hr class="divider">
+
+    <!-- QUESTIONS -->
+    <h2 id="questions">Вопросы к кандидату</h2>
+    <p>В ответе на тестовое задание кандидат <strong>обязан</strong> ответить на следующие вопросы:</p>
+
+    <div class="card">
+      <div class="card-title">Обязательные вопросы в ответе</div>
+      <ul class="req">
+        <li><strong>Срок реализации MVP</strong> — укажите конкретную дату и обоснуйте декомпозицию.</li>
+        <li><strong>Технологический стек</strong> — что выбрали и почему. Как использовали AI-агентов в разработке.</li>
+        <li><strong>Архитектура AI-агента</strong> — покажите схему вызовов Claude API и способ кэширования анкет менторов.</li>
+        <li><strong>Конфигурация Selectel</strong> — какие сервисы, сколько стоит в месяц.</li>
+        <li><strong>Главный технический риск</strong> — что может пойти не так и как вы это митигируете.</li>
+        <li><strong>Что оставите "на после MVP"</strong> — с чем сознательно не будете делать хорошо в v1.</li>
+      </ul>
+    </div>
+
+    <div class="info-box green">
+      <strong>Критерии оценки тестового задания:</strong> работающий MVP на Selectel ≥ красота кода ≥ скорость ≥ документация. Нас интересует ваш AI-native подход и практическое мышление, а не идеальная архитектура.
+    </div>
+
+    <hr class="divider">
+
+    <!-- FOOTER -->
+    <div style="background:var(--dark);border-radius:var(--radius-lg);padding:28px 32px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px;">
+      <div>
+        <div style="font-family:'Geologica',sans-serif;font-size:18px;font-weight:800;color:#fff;letter-spacing:-0.03em;margin-bottom:4px;">brainbox<span style="color:#6b8ff8;">_I</span></div>
+        <div style="font-size:12px;color:rgba(255,255,255,.4);">ТЗ на MVP · v1.0 · Июнь 2025</div>
+      </div>
+      <div style="font-size:12px;color:rgba(255,255,255,.4);text-align:right;line-height:1.6;">
+        Вопросы по ТЗ — в Telegram:<br>
+        <span style="color:rgba(255,255,255,.7);">@rbelt</span>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+</body>
+</html>
